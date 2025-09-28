@@ -2,59 +2,36 @@
 
 public class Actor
 {
-    private string _name = string.Empty;
-    private string _nationality = string.Empty;
-    private DateTime _dateOfBirth;
-    private int? _age; // nullable integer
-    private List<Film> _films = new List<Film>();
+    private readonly List<Film> _films = new();
 
-    public string Name
-    {
-        get { return _name; }
-        set { _name = value; }
-    }
-
-    public string Nationality
-    {
-        get { return _nationality; }
-        set { _nationality = value; }
-    }
-
-    public DateTime DateOfBirth
-    {
-        get { return _dateOfBirth; }
-        set { _dateOfBirth = value; }
-    }
-
-    public int? Age
-    {
-        get { return _age; }
-        set { _age = value; }
-    }
-
-    public List<Film> Films
-    {
-        get { return _films; }
-        set { _films = value; }
-    }
+    public string Name { get; set; } = string.Empty;
+    public string Nationality { get; set; } = string.Empty;
+    public DateTime DateOfBirth { get; set; }
+    public int? Age { get; set; }
+    
+    public IReadOnlyList<Film> Films => _films.AsReadOnly();
+    
+    public void AddFilm(Film film) => _films.Add(film);
+    public void RemoveFilm(Film film) => _films.Remove(film);
+    public void ClearFilms() => _films.Clear();
+    
+    public void AddFilmsRange(IEnumerable<Film> films) => _films.AddRange(films);
 
     public override string ToString()
     {
-        int displayAge;
-        if (Age.HasValue)
-        {
-            displayAge = Age.Value;
-        }
-        else
-        {
-            var today = DateTime.Today;
-            displayAge = today.Year - DateOfBirth.Year;
-            
-            if (DateOfBirth.Date > today.AddYears(-displayAge))
-                displayAge--;
-        }
-
+        int displayAge = Age ?? CalculateAge();
         var filmCount = Films.Count;
         return $"{Name} from {Nationality}, born {DateOfBirth:yyyy-MMM-dd} (age {displayAge}) - {filmCount} film(s)";
+    }
+
+    private int CalculateAge()
+    {
+        var today = DateTime.Today;
+        int age = today.Year - DateOfBirth.Year;
+        
+        if (DateOfBirth.Date > today.AddYears(-age))
+            age--;
+            
+        return age;
     }
 }
