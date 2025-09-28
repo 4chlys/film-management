@@ -12,8 +12,7 @@ class Program
     {
         var dataService = new DataService();
         var menuService = new MenuService(dataService);
-
-        // Seed the data
+        
         dataService.Seed();
 
         Console.WriteLine("Welcome to Film Management System!");
