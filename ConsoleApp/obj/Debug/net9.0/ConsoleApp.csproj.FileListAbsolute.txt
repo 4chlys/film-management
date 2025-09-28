@@ -1,0 +1,4 @@
+/Users/romeoweyns/RiderProjects/romeo.weyns/ConsoleApp/obj/Debug/net9.0/ConsoleApp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/romeoweyns/RiderProjects/romeo.weyns/ConsoleApp/obj/Debug/net9.0/ConsoleApp.AssemblyInfoInputs.cache
+/Users/romeoweyns/RiderProjects/romeo.weyns/ConsoleApp/obj/Debug/net9.0/ConsoleApp.AssemblyInfo.cs
+/Users/romeoweyns/RiderProjects/romeo.weyns/ConsoleApp/obj/Debug/net9.0/ConsoleApp.csproj.CoreCompileInputs.cache
