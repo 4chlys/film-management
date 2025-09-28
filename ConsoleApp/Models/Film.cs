@@ -1,53 +1,26 @@
 ﻿namespace ConsoleApp.Models;
+
+public class Film
+{
+    private readonly List<Actor> _actors = new();
+
+    public string Title { get; set; } = string.Empty;
+    public Genre Genre { get; set; }
+    public DateTime ReleaseDate { get; set; }
+    public double Rating { get; set; }
+    public FilmDirector Director { get; set; }
     
-    public class Film
+    public IReadOnlyList<Actor> Actors => _actors.AsReadOnly();
+    
+    public void AddActor(Actor actor) => _actors.Add(actor);
+    public void RemoveActor(Actor actor) => _actors.Remove(actor);
+    public void ClearActors() => _actors.Clear();
+    
+    public void AddActorsRange(IEnumerable<Actor> actors) => _actors.AddRange(actors);
+
+    public override string ToString()
     {
-        private string _title = string.Empty;
-        private Genre _genre;
-        private DateTime _releaseDate;
-        private double _rating;
-        private FilmDirector _director = null!;
-        private List<Actor> _actors = new List<Actor>();
-
-        public string Title 
-        { 
-            get { return _title; } 
-            set { _title = value; } 
-        }
-        
-        public Genre Genre 
-        { 
-            get { return _genre; } 
-            set { _genre = value; } 
-        }
-        
-        public DateTime ReleaseDate 
-        { 
-            get { return _releaseDate; } 
-            set { _releaseDate = value; } 
-        }
-        
-        public double Rating 
-        { 
-            get { return _rating; } 
-            set { _rating = value; } 
-        }
-        
-        public FilmDirector Director 
-        { 
-            get { return _director; } 
-            set { _director = value; } 
-        }
-        
-        public List<Actor> Actors 
-        { 
-            get { return _actors; } 
-            set { _actors = value; } 
-        }
-
-        public override string ToString()
-        {
-            var actorNames = string.Join(", ", Actors.Select(a => a.Name));
-            return $"{Title} ({ReleaseDate.Year}) [{Genre}] - Rating: {Rating:F1} - Directed by {Director.Name} - Starring: {actorNames}";
-        }
+        var actorNames = string.Join(", ", Actors.Select(a => a.Name));
+        return $"{Title} ({ReleaseDate.Year}) [{Genre}] - Rating: {Rating:F1} - Directed by {Director?.Name ?? "Unknown"} - Starring: {actorNames}";
     }
+}
