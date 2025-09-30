@@ -2,7 +2,7 @@
 
 public class FilmDirector
 {
-    private readonly List<Film> _films = new();
+    private readonly List<Film> _films = [];
 
     public string Name { get; set; } = string.Empty;
     public string Country { get; set; } = string.Empty;

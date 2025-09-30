@@ -2,7 +2,7 @@
 
 public class Film
 {
-    private readonly List<Actor> _actors = new();
+    private readonly List<Actor> _actors = [];
 
     public string Title { get; set; } = string.Empty;
     public Genre Genre { get; set; }

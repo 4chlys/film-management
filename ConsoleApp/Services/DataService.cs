@@ -4,8 +4,8 @@ namespace ConsoleApp.Services;
 
 public class DataService
 {
-    public List<Actor> Actors { get; private set; } = new();
-    public List<Film> Films { get; private set; } = new();
+    public List<Actor> Actors { get; private set; } = [];
+    public List<Film> Films { get; private set; } = [];
 
     public void Seed()
     {
@@ -29,7 +29,7 @@ public class DataService
             Name = "Colin Farrell",
             Nationality = "Irish",
             DateOfBirth = new DateTime(1976, 5, 31),
-            Age = null // nullable example
+            Age = null
         };
         
         var kidman = new Actor
