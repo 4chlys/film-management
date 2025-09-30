@@ -1,43 +1,31 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using ConsoleApp.Services;
 
-using System;
-using ConsoleApp.Models;
-using ConsoleApp.Services;
+var dataService = new DataService();
+var menuService = new MenuService(dataService);
 
-namespace ConsoleApp;
+dataService.Seed();
 
-class Program
+Console.WriteLine("Welcome to Film Management System!");
+    
+bool running = true;
+while (running)
 {
-    static void Main(string[] args)
-    {
-        var dataService = new DataService();
-        var menuService = new MenuService(dataService);
+    menuService.ShowMainMenu();
         
-        dataService.Seed();
-
-        Console.WriteLine("Welcome to Film Management System!");
-            
-        bool running = true;
-        while (running)
+    if (int.TryParse(Console.ReadLine(), out int choice))
+    {
+        if (choice == 0)
         {
-            menuService.ShowMainMenu();
-                
-            if (int.TryParse(Console.ReadLine(), out int choice))
-            {
-                if (choice == 0)
-                {
-                    running = false;
-                    Console.WriteLine("Goodbye!");
-                }
-                else
-                {
-                    menuService.HandleMenuChoice(choice);
-                }
-            }
-            else
-            {
-                Console.WriteLine("Please enter a valid number.");
-            }
+            running = false;
+            Console.WriteLine("Goodbye!");
         }
+        else
+        {
+            menuService.HandleMenuChoice(choice);
+        }
+    }
+    else
+    {
+        Console.WriteLine("Please enter a valid number.");
     }
 }
