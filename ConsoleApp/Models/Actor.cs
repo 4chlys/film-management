@@ -8,6 +8,12 @@ public class Actor
     public string Nationality { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
     public int? Age { get; set; }
+
+    public Actor(string name, DateTime dateOfBirth)
+    {
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        DateOfBirth = dateOfBirth;
+    }
     
     public IReadOnlyList<Film> Films => _films.AsReadOnly();
     

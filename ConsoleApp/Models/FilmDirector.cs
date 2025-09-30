@@ -4,9 +4,15 @@ public class FilmDirector
 {
     private readonly List<Film> _films = new();
 
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; }
     public string Country { get; set; } = string.Empty;
     public DateTime CareerStart { get; set; }
+
+    public FilmDirector(string name, DateTime careerStart)
+    {
+        Name = name;
+        CareerStart = careerStart;
+    }
     
     public IReadOnlyList<Film> Films => _films.AsReadOnly();
     

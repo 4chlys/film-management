@@ -10,6 +10,12 @@ public class Film
     public double Rating { get; set; }
     public FilmDirector Director { get; set; }
     
+    public Film(string title, FilmDirector director)
+    {
+        Title = title ?? throw new ArgumentNullException(nameof(title));
+        Director = director ?? throw new ArgumentNullException(nameof(director));
+    }
+    
     public IReadOnlyList<Actor> Actors => _actors.AsReadOnly();
     
     public void AddActor(Actor actor) => _actors.Add(actor);
