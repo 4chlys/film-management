@@ -8,7 +8,7 @@ public class FilmDirector
     public string Country { get; set; } = string.Empty;
     public int YearStarted { get; set; }
 
-    public ICollection<Film> Films => _films.AsReadOnly();
+    public ICollection<Film> Films => _films;
     
     public void AddFilm(Film film) => _films.Add(film);
 
