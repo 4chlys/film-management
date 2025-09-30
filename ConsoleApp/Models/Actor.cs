@@ -9,7 +9,7 @@ public class Actor
     public DateTime DateOfBirth { get; set; }
     public int? Age { get; set; }
 
-    public IReadOnlyList<Film> Films => _films.AsReadOnly();
+    public ICollection<Film> Films => _films.AsReadOnly();
     
     public void AddFilm(Film film) => _films.Add(film);
 

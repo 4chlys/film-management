@@ -10,7 +10,7 @@ public class Film
     public double Rating { get; set; } 
     public FilmDirector Director { get; set; }
     
-    public IReadOnlyList<Actor> Actors => _actors.AsReadOnly();
+    public ICollection<Actor> Actors => _actors.AsReadOnly();
     
     public void AddActor(Actor actor) => _actors.Add(actor);
 
