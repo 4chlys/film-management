@@ -36,14 +36,14 @@ public class Actor : IValidatableObject
         {
             errors.Add(new ValidationResult(
                 "Date of birth should be in the past!",
-                new[] { nameof(DateOfBirth) }));
+                [nameof(DateOfBirth)]));
         }
         
         if (DateOfBirth.Year < 1800)
         {
             errors.Add(new ValidationResult(
                 "Date of birth must be after 1800!",
-                new[] { nameof(DateOfBirth) }));
+                [nameof(DateOfBirth)]));
         }
 
         if (!Age.HasValue) return errors;
@@ -52,7 +52,7 @@ public class Actor : IValidatableObject
         {
             errors.Add(new ValidationResult(
                 $"Provided age ({Age}) doesn't match date of birth (calculated age: {calculatedAge})!",
-                new[] { nameof(Age) }));
+                [nameof(Age)]));
         }
 
         return errors;

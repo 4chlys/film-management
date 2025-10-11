@@ -34,14 +34,14 @@ public class FilmDirector : IValidatableObject
             {
                 errors.Add(new ValidationResult(
                     "Year started must be after 1888 (invention of cinema)!",
-                    new[] { nameof(YearStarted) }));
+                    [nameof(YearStarted)]));
             }
             
             if (YearStarted.Value > DateTime.Now.Year)
             {
                 errors.Add(new ValidationResult(
                     "Year started cannot be in the future!",
-                    new[] { nameof(YearStarted) }));
+                    [nameof(YearStarted)]));
             }
         }
 
