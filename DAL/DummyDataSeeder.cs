@@ -1,6 +1,4 @@
-﻿
-
-using FilmManagement.BL.Domain;
+﻿using FilmManagement.BL.Domain;
 
 namespace FilmManagement.DAL;
 
@@ -8,11 +6,40 @@ public static class DummyDataSeeder
 {
     public static void Seed()
     {
+        ImdbIdGenerator.Reset();
+        
         // Create directors (not part of many-to-many, just needed for films)
-        var lanthimos = new FilmDirector { Name = "Yorgos Lanthimos", Country = "Greece", YearStarted = 2001 };
-        var kubrick = new FilmDirector { Name = "Stanley Kubrick", Country = "USA", YearStarted = 1951 };
-        var lynch = new FilmDirector { Name = "David Lynch", Country = "USA", YearStarted = 1970 };
-        var eggers = new FilmDirector { Name = "Robert Eggers", Country = "USA", YearStarted = 2015 };
+        var lanthimos = new FilmDirector 
+        { 
+            Name = "Yorgos Lanthimos", 
+            Country = "Greece", 
+            YearStarted = 2001,
+            ImdbId = "nm0487166"
+        };
+        
+        var kubrick = new FilmDirector 
+        { 
+            Name = "Stanley Kubrick", 
+            Country = "USA", 
+            YearStarted = 1951,
+            ImdbId = "nm0000040"
+        };
+        
+        var lynch = new FilmDirector 
+        { 
+            Name = "David Lynch", 
+            Country = "USA", 
+            YearStarted = 1970,
+            ImdbId = "nm0000186"
+        };
+        
+        var eggers = new FilmDirector 
+        { 
+            Name = "Robert Eggers", 
+            Country = "USA", 
+            YearStarted = 2015,
+            ImdbId = "nm2125482"
+        };
 
         InMemoryStorage.FilmDirectors.AddRange([lanthimos, kubrick, lynch, eggers]);
         
@@ -22,7 +49,8 @@ public static class DummyDataSeeder
             Name = "Emma Stone",
             Nationality = "American",
             DateOfBirth = new DateTime(1988, 11, 6),
-            Age = 36
+            Age = 36,
+            ImdbId = "nm1297015"
         };
         
         var farrell = new Actor
@@ -30,7 +58,8 @@ public static class DummyDataSeeder
             Name = "Colin Farrell",
             Nationality = "Irish",
             DateOfBirth = new DateTime(1976, 5, 31),
-            Age = null
+            Age = null,
+            ImdbId = "nm0268199"
         };
         
         var kidman = new Actor
@@ -38,7 +67,8 @@ public static class DummyDataSeeder
             Name = "Nicole Kidman",
             Nationality = "Australian",
             DateOfBirth = new DateTime(1967, 6, 20),
-            Age = 57
+            Age = 57,
+            ImdbId = "nm0000173"
         };
         
         var pattinson = new Actor
@@ -46,7 +76,8 @@ public static class DummyDataSeeder
             Name = "Robert Pattinson",
             Nationality = "British",
             DateOfBirth = new DateTime(1986, 5, 13),
-            Age = 38
+            Age = 38,
+            ImdbId = "nm1500155"
         };
         
         var dafoe = new Actor
@@ -54,7 +85,8 @@ public static class DummyDataSeeder
             Name = "Willem Dafoe",
             Nationality = "American",
             DateOfBirth = new DateTime(1955, 7, 22),
-            Age = null
+            Age = null,
+            ImdbId = "nm0000353"
         };
         
         var keir = new Actor
@@ -62,7 +94,8 @@ public static class DummyDataSeeder
             Name = "Barry Keoghan",
             Nationality = "Irish",
             DateOfBirth = new DateTime(1992, 10, 18),
-            Age = 32
+            Age = 32,
+            ImdbId = "nm4422686"
         };
 
         InMemoryStorage.Actors.AddRange([stone, farrell, kidman, pattinson, dafoe, keir]);
@@ -74,7 +107,8 @@ public static class DummyDataSeeder
             Genre = Genre.Drama,
             ReleaseDate = new DateTime(2015, 10, 16),
             Rating = 7.2,
-            Director = lanthimos
+            Director = lanthimos,
+            ImdbId = "tt3464902"
         };
         
         var poorThings = new Film
@@ -83,7 +117,8 @@ public static class DummyDataSeeder
             Genre = Genre.Comedy,
             ReleaseDate = new DateTime(2023, 12, 8),
             Rating = 7.9,
-            Director = lanthimos
+            Director = lanthimos,
+            ImdbId = "tt14230458"
         };
         
         var theShining = new Film
@@ -92,7 +127,8 @@ public static class DummyDataSeeder
             Genre = Genre.Horror,
             ReleaseDate = new DateTime(1980, 5, 23),
             Rating = 8.4,
-            Director = kubrick
+            Director = kubrick,
+            ImdbId = "tt0081505"
         };
         
         var mulhollandDrive = new Film
@@ -101,7 +137,8 @@ public static class DummyDataSeeder
             Genre = Genre.Thriller,
             ReleaseDate = new DateTime(2001, 10, 12),
             Rating = 7.9,
-            Director = lynch
+            Director = lynch,
+            ImdbId = "tt0166924"
         };
         
         var theLighthouse = new Film
@@ -110,7 +147,8 @@ public static class DummyDataSeeder
             Genre = Genre.Horror,
             ReleaseDate = new DateTime(2019, 10, 18),
             Rating = 7.4,
-            Director = eggers
+            Director = eggers,
+            ImdbId = "tt7984734"
         };
         
         var theNorthman = new Film
@@ -119,7 +157,8 @@ public static class DummyDataSeeder
             Genre = Genre.Action,
             ReleaseDate = new DateTime(2022, 4, 22),
             Rating = 7.0,
-            Director = eggers
+            Director = eggers,
+            ImdbId = "tt11138512"
         };
 
         InMemoryStorage.Films.AddRange([theLobster, poorThings, theShining, mulhollandDrive, theLighthouse, theNorthman
