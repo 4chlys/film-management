@@ -1,20 +1,51 @@
-﻿namespace FilmManagement.BL.Domain;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class FilmDirector
+namespace FilmManagement.BL.Domain;
+
+public class FilmDirector : IValidatableObject
 {
     private readonly List<Film> _films = [];
 
+    [Required(ErrorMessage = "Name is required")]
+    [StringLength(100, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 100 characters")]
     public string Name { get; set; } = string.Empty;
+    
+    [Required(ErrorMessage = "Country is required")]
+    [StringLength(50, MinimumLength = 2, ErrorMessage = "Country must be between 2 and 50 characters")]
     public string Country { get; set; } = string.Empty;
-    public int YearStarted { get; set; }
+    
+    public int? YearStarted { get; set; }
+    
+    [Key]
+    [StringLength(10, MinimumLength = 10, ErrorMessage = "IMDb ID must be exactly 10 characters")]
+    [RegularExpression(@"^nm\d{7,8}$", ErrorMessage = "IMDb ID must start with 'nm' followed by 7-8 digits")]
+    public string ImdbId { get; set; } = string.Empty;
 
     public ICollection<Film> Films => _films;
     
     public void AddFilm(Film film) => _films.Add(film);
 
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        var errors = new List<ValidationResult>();
+        
+        if (YearStarted.HasValue && YearStarted.Value > DateTime.Now.Year)
+        {
+            errors.Add(new ValidationResult(
+                "Year started cannot be in the future!",
+                new[] { nameof(YearStarted) }));
+        }
+
+        return errors;
+    }
+
     public override string ToString()
     {
-        var yearsActive = DateTime.Now.Year - YearStarted;
-        return $"{Name} from {Country}, directing since {YearStarted} ({yearsActive} years)";
+        if (YearStarted.HasValue)
+        {
+            var yearsActive = DateTime.Now.Year - YearStarted.Value;
+            return $"{Name} from {Country}, directing since {YearStarted} ({yearsActive} years)";
+        }
+        return $"{Name} from {Country}";
     }
 }
