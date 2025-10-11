@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using FilmManagement.BL.Domain;
 using FilmManagement.DAL;
 
@@ -5,14 +6,44 @@ namespace FilmManagement.BL;
 
 public class Manager(IRepository repository) : IManager
 {
-    public void AddFilm(Film film)
+    public Film AddFilm(string title, Genre genre, DateTime releaseDate, double rating, FilmDirector director)
     {
-        repository.CreateFilm(film);
+        var filmToCreate = new Film
+        {
+            Title = title,
+            Genre = genre,
+            ReleaseDate = releaseDate,
+            Rating = rating,
+            Director = director
+        };
+        
+        List<ValidationResult> errors = new List<ValidationResult>();
+        bool isValid = Validator.TryValidateObject(filmToCreate, 
+            new ValidationContext(filmToCreate),
+            errors, validateAllProperties: true);
+
+        if (!isValid)
+        {
+            throw new ArgumentException(string.Join("|", errors));
+        }
+        
+        repository.CreateFilm(filmToCreate);
+        return filmToCreate;
     }
-    
+
+    public Film GetFilm(string imdbId)
+    {
+        return repository.ReadFilm(imdbId);       
+    }
+
     public IEnumerable<Film> GetFilms()
     {
-        return repository.ReadFilms();
+        return repository.ReadAllFilms();
+    }
+
+    public IEnumerable<Film> GetFilmsByGenre(Genre genre)
+    {
+        return repository.ReadFilmsByGenre(genre);       
     }
 
     public void ChangeFilms(IEnumerable<Film> films)
@@ -24,17 +55,51 @@ public class Manager(IRepository repository) : IManager
     {
         repository.DeleteFilm(film);
     }
-    
-    public void AddActor(Actor actor)
+
+    public Actor AddActor(string name, string nationality, DateTime dateOfBirth, int? age)
     {
-        repository.CreateActor(actor);
+        var actorToCreate = new Actor
+        {
+            Name = name,
+            Nationality = nationality,
+            DateOfBirth = dateOfBirth,
+            Age = age
+        };
+        
+        List<ValidationResult> errors = new List<ValidationResult>();
+        bool isValid = Validator.TryValidateObject(actorToCreate, 
+            new ValidationContext(actorToCreate),
+            errors, validateAllProperties: true);
+
+        if (!isValid)
+        {
+            throw new ArgumentException(string.Join("|", errors));
+        }
+        
+        repository.CreateActor(actorToCreate);
+        return actorToCreate;
     }
-    
+
+    public Actor GetActor(string imdbId)
+    {
+        return repository.ReadActor(imdbId);       
+    }
+
     public IEnumerable<Actor> GetActors()
     {
-        return repository.ReadActors();
+        return repository.ReadAllActors();
     }
-    
+
+    public IEnumerable<Actor> GetActorsByNationality(string nationality)
+    {
+        return repository.ReadActorsByNationality(nationality);       
+    }
+
+    public IEnumerable<Actor> GetActorsByAge(int age)
+    {
+        return repository.ReadActorsByAge(age);       
+    }
+
     public void ChangeActors(IEnumerable<Actor> actors)
     {
         repository.UpdateActors(actors);
@@ -43,15 +108,38 @@ public class Manager(IRepository repository) : IManager
     {
         repository.DeleteActor(actor);
     }
-    
-    public void AddDirector(FilmDirector director)
+
+    public FilmDirector AddDirector(string name, string country, int? yearStarted)
     {
-        repository.CreateDirector(director);
+        var filmDirectorToCreate = new FilmDirector
+        {
+            Name = name,
+            Country = country,
+            YearStarted = yearStarted       
+        };
+        
+        List<ValidationResult> errors = new List<ValidationResult>();
+        bool isValid = Validator.TryValidateObject(filmDirectorToCreate, 
+            new ValidationContext(filmDirectorToCreate),
+            errors, validateAllProperties: true);
+
+        if (!isValid)
+        {
+            throw new ArgumentException(string.Join("|", errors));
+        }
+        
+        repository.CreateDirector(filmDirectorToCreate);
+        return filmDirectorToCreate;
     }
-    
+
+    public FilmDirector GetDirector(string imdbId)
+    {
+        return repository.ReadDirector(imdbId);      
+    }
+
     public IEnumerable<FilmDirector> GetDirectors()
     {
-        return repository.ReadDirectors();
+        return repository.ReadAllDirectors();
     }
     
     public void ChangeDirectors(IEnumerable<FilmDirector> directors)
