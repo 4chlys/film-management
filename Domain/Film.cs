@@ -10,18 +10,14 @@ public class Film : IValidatableObject
     [StringLength(100, MinimumLength = 3, ErrorMessage = "Title must be between 3 and 100 characters")]
     public string Title { get; set; } = string.Empty;
     
-    [Required(ErrorMessage = "Genre is required")]
     public Genre Genre { get; set; }
     
-    [Required(ErrorMessage = "Release date is required")]
     [DataType(DataType.Date)]
     public DateTime ReleaseDate { get; set; }
     
-    [Required(ErrorMessage = "Rating is required")]
     [Range(0, 10, ErrorMessage = "Rating must be between 0 and 10")]
     public double Rating { get; set; }
     
-    [Required(ErrorMessage = "Director is required")]
     public FilmDirector Director { get; set; }
     
     [Key]
@@ -41,28 +37,28 @@ public class Film : IValidatableObject
         {
             errors.Add(new ValidationResult(
                 "Genre unknown!",
-                new[] { nameof(Genre) }));
+                [nameof(Genre)]));
         }
         
         if (ReleaseDate > DateTime.Now)
         {
             errors.Add(new ValidationResult(
                 "Release date cannot be in the future!",
-                new[] { nameof(ReleaseDate) }));
+                [nameof(ReleaseDate)]));
         }
         
         if (ReleaseDate.Year < 1888)
         {
             errors.Add(new ValidationResult(
                 "Release date must be after 1888 (when cinema was invented)!",
-                new[] { nameof(ReleaseDate) }));
+                [nameof(ReleaseDate)]));
         }
         
         if (Math.Round(Rating, 1) != Rating)
         {
             errors.Add(new ValidationResult(
                 "Rating can have at most one decimal place!",
-                new[] { nameof(Rating) }));
+                [nameof(Rating)]));
         }
 
         return errors;
