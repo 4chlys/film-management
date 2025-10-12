@@ -61,7 +61,7 @@ public class Actor : IValidatableObject
     public override string ToString()
     {
         int displayAge = Age ?? CalculateAge();
-        return $"{Name} from {Nationality}, born {DateOfBirth:yyyy-MMM-dd} (age {displayAge})";
+        return $"{Name}, {Nationality}, born {DateOfBirth:yyyy-MMM-dd} (age {displayAge})";
     }
 
     private int CalculateAge()
