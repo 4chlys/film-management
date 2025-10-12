@@ -21,7 +21,7 @@ public class Film : IValidatableObject
     public FilmDirector Director { get; set; }
     
     [Key]
-    [StringLength(10, MinimumLength = 10, ErrorMessage = "IMDb ID must be exactly 10 characters")]
+    [StringLength(9, MinimumLength = 9, ErrorMessage = "IMDb ID must be exactly 9 characters")]
     [RegularExpression(@"^tt\d{7,8}$", ErrorMessage = "IMDb ID must start with 'tt' followed by 7-8 digits")]
     public string ImdbId { get; set; } = string.Empty;
     
