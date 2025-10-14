@@ -1,6 +1,6 @@
 ﻿using FilmManagement.BL;
 using FilmManagement.DAL;
-using FilmManagement.UI;
+using FilmManagement.UI.CA;
 
 DummyDataSeeder.Seed();
 

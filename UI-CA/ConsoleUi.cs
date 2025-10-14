@@ -2,7 +2,7 @@ using FilmManagement.BL;
 using FilmManagement.BL.Domain;
 using FilmManagement.DAL;
 
-namespace FilmManagement.UI;
+namespace FilmManagement.UI.CA;
 
 public class ConsoleUi(IManager manager)
 {
