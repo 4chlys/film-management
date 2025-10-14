@@ -1,6 +1,6 @@
 using FilmManagement.BL;
 using FilmManagement.BL.Domain;
-using FilmManagement.DAL;
+using FilmManagement.UI.CA.Extensions;
 
 namespace FilmManagement.UI.CA;
 
@@ -56,7 +56,7 @@ public class ConsoleUi(IManager manager)
         Console.WriteLine("=========");
         foreach (var film in _manager.GetFilms())
         {
-            Console.WriteLine(film.ToString());
+            Console.WriteLine(film.GetInfo());
         }
     }
 
@@ -80,7 +80,7 @@ public class ConsoleUi(IManager manager)
             Console.WriteLine("===============================");
             foreach (var film in filteredFilms)
             {
-                Console.WriteLine(film.ToString());
+                Console.WriteLine(film.GetInfo());
             }
         }
         else
@@ -95,7 +95,7 @@ public class ConsoleUi(IManager manager)
         Console.WriteLine("==========");
         foreach (var actor in _manager.GetActors())
         {
-            Console.WriteLine(actor.ToString());
+            Console.WriteLine(actor.GetInfo());
         }
     }
 
@@ -129,7 +129,7 @@ public class ConsoleUi(IManager manager)
         {
             foreach (var actor in filteredActors)
             {
-                Console.WriteLine(actor.ToString());
+                Console.WriteLine(actor.GetInfo());
             }
         }
         else

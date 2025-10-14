@@ -63,11 +63,4 @@ public class Film : IValidatableObject
 
         return errors;
     }
-    
-    public override string ToString()
-    {
-        var actorNames = string.Join(", ", Actors.Select(a => a.Name));
-        var actorsText = string.IsNullOrEmpty(actorNames) ? "No actors listed" : $"Starring: {actorNames}";
-        return $"{Title} ({ReleaseDate.Year}) [{Genre}] - Rating: {Rating:F1} - Directed by {Director?.Name ?? "Unknown"} - {actorsText}";
-    }
 }

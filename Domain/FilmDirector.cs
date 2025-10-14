@@ -47,14 +47,4 @@ public class FilmDirector : IValidatableObject
 
         return errors;
     }
-
-    public override string ToString()
-    {
-        if (YearStarted.HasValue)
-        {
-            var yearsActive = DateTime.Now.Year - YearStarted.Value;
-            return $"{Name} from {Country}, directing since {YearStarted} ({yearsActive} years)";
-        }
-        return $"{Name} from {Country}";
-    }
 }

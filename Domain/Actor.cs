@@ -58,12 +58,6 @@ public class Actor : IValidatableObject
         return errors;
     }
 
-    public override string ToString()
-    {
-        int displayAge = Age ?? CalculateAge();
-        return $"{Name}, {Nationality}, born {DateOfBirth:yyyy-MMM-dd} (age {displayAge})";
-    }
-
     private int CalculateAge()
     {
         var today = DateTime.Today;
