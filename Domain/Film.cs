@@ -6,8 +6,8 @@ public class Film : IValidatableObject
 {
     private readonly List<Actor> _actors = [];
     
-    [Required(ErrorMessage = "Title is required")]
-    [StringLength(100, MinimumLength = 3, ErrorMessage = "Title must be between 3 and 100 characters")]
+    [Required]
+    [StringLength(100, MinimumLength = 3)]
     public string Title { get; set; } = string.Empty;
     
     public Genre Genre { get; set; }
@@ -15,14 +15,14 @@ public class Film : IValidatableObject
     [DataType(DataType.Date)]
     public DateTime ReleaseDate { get; set; }
     
-    [Range(0, 10, ErrorMessage = "Rating must be between 0 and 10")]
+    [Range(0, 10)]
     public double Rating { get; set; }
     
     public FilmDirector Director { get; set; }
     
     [Key]
     [StringLength(9, MinimumLength = 9, ErrorMessage = "IMDb ID must be exactly 9 characters")]
-    [RegularExpression(@"^tt\d{7,8}$", ErrorMessage = "IMDb ID must start with 'tt' followed by 7-8 digits")]
+    [RegularExpression(@"^tt\d{7,8}$", ErrorMessage = "IMDb ID must start with 'tt' followed by 7 digits")]
     public string ImdbId { get; set; } = string.Empty;
     
     public ICollection<Actor> Actors => _actors;

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using FilmManagement.BL;
 using FilmManagement.BL.Domain;
 using FilmManagement.UI.CA.Extensions;
@@ -7,6 +8,16 @@ namespace FilmManagement.UI.CA;
 public class ConsoleUi(IManager manager)
 {
     private IManager _manager = manager;
+
+    private void DisplayValidationErrors(string errorMessage)
+    {
+        var errors = errorMessage.Split('|', StringSplitOptions.RemoveEmptyEntries);
+        Console.WriteLine("Validation errors:");
+        foreach (var error in errors)
+        {
+            Console.WriteLine($"  - {error.Trim()}");
+        }
+    }
 
     public void ShowMainMenu()
     {
@@ -209,9 +220,9 @@ public class ConsoleUi(IManager manager)
                         director = _manager.AddDirector(directorInput, country, yearStarted);
                         Console.WriteLine("Director created.");
                     }
-                    catch (ArgumentException ex)
+                    catch (ValidationException ex)
                     {
-                        Console.WriteLine($"Error creating director: {ex.Message}");
+                        DisplayValidationErrors(ex.Message);
                         Console.WriteLine("Please try again...\n");
                         continue;
                     }
@@ -221,9 +232,9 @@ public class ConsoleUi(IManager manager)
                 Console.WriteLine("Film added successfully!");
                 success = true;
             }
-            catch (ArgumentException ex)
+            catch (ValidationException ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                DisplayValidationErrors(ex.Message);
                 Console.WriteLine("Please try again...\n");
             }
         }
@@ -275,9 +286,9 @@ public class ConsoleUi(IManager manager)
                 Console.WriteLine("Actor added successfully!");
                 success = true;
             }
-            catch (ArgumentException ex)
+            catch (ValidationException ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                DisplayValidationErrors(ex.Message);
                 Console.WriteLine("Please try again...\n");
             }
         }

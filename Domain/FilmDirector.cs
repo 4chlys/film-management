@@ -6,11 +6,11 @@ public class FilmDirector : IValidatableObject
 {
     private readonly List<Film> _films = [];
 
-    [Required(ErrorMessage = "Name is required")]
-    [StringLength(100, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 100 characters")]
+    [Required]
+    [StringLength(100, MinimumLength = 3)]
     public string Name { get; set; } = string.Empty;
     
-    [StringLength(50, MinimumLength = 2, ErrorMessage = "Country must be between 2 and 50 characters")]
+    [StringLength(50, MinimumLength = 2)]
     public string Country { get; set; } = string.Empty;
     
     public int? YearStarted { get; set; } 

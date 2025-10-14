@@ -6,22 +6,22 @@ public class Actor : IValidatableObject
 {
     private readonly List<Film> _films = [];
 
-    [Required(ErrorMessage = "Name is required")]
-    [StringLength(100, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 100 characters")]
+    [Required]
+    [StringLength(100, MinimumLength = 3)]
     public string Name { get; set; } = string.Empty;
     
-    [StringLength(50, MinimumLength = 2, ErrorMessage = "Nationality must be between 2 and 50 characters")]
+    [StringLength(50, MinimumLength = 2)]
     public string Nationality { get; set; } = string.Empty;
     
     [DataType(DataType.Date)]
     public DateTime DateOfBirth { get; set; }
     
-    [Range(0, 150, ErrorMessage = "Age must be between 0 and 150")]
+    [Range(0, 150)]
     public int? Age { get; set; }
     
     [Key]
     [StringLength(9, MinimumLength = 9, ErrorMessage = "IMDb ID must be exactly 9 characters")]
-    [RegularExpression(@"^nm\d{7,8}$", ErrorMessage = "IMDb ID must start with 'nm' followed by 7-8 digits")]
+    [RegularExpression(@"^nm\d{7,8}$", ErrorMessage = "IMDb ID must start with 'nm' followed by 7 digits")]
     public string ImdbId { get; set; } = string.Empty;
 
     public ICollection<Film> Films => _films;
