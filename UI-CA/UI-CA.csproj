@@ -10,8 +10,8 @@
       <TargetFramework>net9.0</TargetFramework>
       <ImplicitUsings>enable</ImplicitUsings>
       <Nullable>disable</Nullable>
-      <AssemblyName>FilmManagement.UI</AssemblyName>
-      <RootNamespace>FilmManagement.UI</RootNamespace>
+      <AssemblyName>FilmManagement.UI.CA</AssemblyName>
+      <RootNamespace>FilmManagement.UI.CA</RootNamespace>
   </PropertyGroup>
 
 </Project>
