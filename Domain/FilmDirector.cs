@@ -17,7 +17,7 @@ public class FilmDirector : IValidatableObject
     
     [Key]
     [StringLength(9, MinimumLength = 9, ErrorMessage = "IMDb ID must be exactly 9 characters")]
-    [RegularExpression(@"^nm\d{7,8}$", ErrorMessage = "IMDb ID must start with 'nm' followed by 7-8 digits")]
+    [RegularExpression(@"^nm\d{7,8}$", ErrorMessage = "IMDb ID must start with 'nm' followed by 7 digits")]
     public string ImdbId { get; set; } = string.Empty;
 
     public ICollection<Film> Films => _films;
