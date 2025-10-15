@@ -74,21 +74,34 @@ public class ConsoleUi(IManager manager)
     private void ShowFilmsByGenre()
     {
         Console.WriteLine("\nSelect genre:");
-        var genres = Enum.GetValues<Genre>();
-        foreach (var g in genres)
-        {
-            Console.WriteLine($"{(int)g}) {g}");
-        }
-        Console.Write("Genre choice: ");
+        Console.WriteLine("==============");
         
-        if (int.TryParse(Console.ReadLine(), out int genreChoice) && 
-            Enum.IsDefined(typeof(Genre), genreChoice))
+        foreach (var name in EnumExtensions.GetAllDisplayNames<Genre>())
         {
-            var selectedGenre = (Genre)genreChoice;
-            var filteredFilms = _manager.GetFilmsByGenre(selectedGenre);
-            
-            Console.WriteLine($"\nFilms in {selectedGenre} genre:");
-            Console.WriteLine("===============================");
+            Console.WriteLine($"- {name}");
+        }
+
+        Genre? selectedGenre = null;
+        while (selectedGenre is null)
+        {
+            Console.Write("Enter genre name: ");
+            string genreInput = Console.ReadLine() ?? "";
+
+            selectedGenre = genreInput.ParseEnum<Genre>();
+
+            if (selectedGenre is null)
+            {
+                Console.WriteLine("Invalid genre. Please try again.\n");
+            }
+        }
+
+        var filteredFilms = _manager.GetFilmsByGenre(selectedGenre.Value);
+
+        Console.WriteLine($"\nFilms in {selectedGenre.Value.GetDisplayName()} genre:");
+        Console.WriteLine("===========================================");
+
+        if (filteredFilms.Any())
+        {
             foreach (var film in filteredFilms)
             {
                 Console.WriteLine(film.GetInfo());
@@ -96,7 +109,7 @@ public class ConsoleUi(IManager manager)
         }
         else
         {
-            Console.WriteLine("Invalid genre selection.");
+            Console.WriteLine("No films found in this genre.");
         }
     }
 
@@ -123,16 +136,7 @@ public class ConsoleUi(IManager manager)
             ageFilter = parsedAge;
         }
 
-        var filteredActors = _manager.GetActors().Where(actor =>
-        {
-            bool nameMatch = string.IsNullOrEmpty(nameFilter) || 
-                             actor.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase);
-            
-            bool ageMatch = !ageFilter.HasValue || 
-                            (actor.Age.HasValue && actor.Age >= ageFilter);
-
-            return nameMatch && ageMatch;
-        }).ToList();
+        var filteredActors = _manager.GetActorsByCriteria(nameFilter, ageFilter);
 
         Console.WriteLine($"\nFiltered actors:");
         Console.WriteLine("================");
@@ -153,7 +157,7 @@ public class ConsoleUi(IManager manager)
     {
         Console.WriteLine("\nAdd film");
         Console.WriteLine("========");
-        
+
         bool success = false;
         while (!success)
         {
@@ -162,21 +166,22 @@ public class ConsoleUi(IManager manager)
                 Console.Write("Title: ");
                 string title = Console.ReadLine() ?? "";
                 
-                Console.WriteLine("Genre:");
-                var genres = Enum.GetValues<Genre>();
-                foreach (var g in genres)
+                Console.WriteLine("\nAvailable genres:");
+                foreach (var name in EnumExtensions.GetAllDisplayNames<Genre>())
                 {
-                    Console.WriteLine($"  {(int)g}) {g}");
+                    Console.WriteLine($"- {name}");
                 }
-                Console.Write("Genre choice: ");
-                string genreInput = Console.ReadLine() ?? "";
-                if (!int.TryParse(genreInput, out int genreInt) || !Enum.IsDefined(typeof(Genre), genreInt))
+
+                Genre? genre = null;
+                while (genre is null)
                 {
-                    Console.WriteLine("Error: Invalid genre selection.");
-                    Console.WriteLine("Please try again...\n");
-                    continue;
+                    Console.Write("Enter genre name: ");
+                    string input = Console.ReadLine() ?? "";
+                    genre = input.ParseEnum<Genre>();
+
+                    if (genre is null)
+                        Console.WriteLine("Invalid genre. Please try again.\n");
                 }
-                Genre genre = (Genre)genreInt;
                 
                 Console.Write("Release date (yyyy-MM-dd): ");
                 string releaseDateInput = Console.ReadLine() ?? "";
@@ -198,23 +203,19 @@ public class ConsoleUi(IManager manager)
                 
                 Console.Write("Director name: ");
                 string directorInput = Console.ReadLine() ?? "";
-                
-                var director = _manager.GetDirectors().FirstOrDefault(d => 
-                    d.Name.Equals(directorInput, StringComparison.OrdinalIgnoreCase));
-                
+                var director = _manager.GetDirectorByName(directorInput);
+
                 if (director == null)
                 {
                     Console.Write("Director not found. Country: ");
                     string country = Console.ReadLine() ?? "";
-                    
+
                     Console.Write("Year started (optional): ");
                     string yearInput = Console.ReadLine() ?? "";
                     int? yearStarted = null;
                     if (int.TryParse(yearInput, out int year))
-                    {
                         yearStarted = year;
-                    }
-                    
+
                     try
                     {
                         director = _manager.AddDirector(directorInput, country, yearStarted);
@@ -228,7 +229,7 @@ public class ConsoleUi(IManager manager)
                     }
                 }
                 
-                _manager.AddFilm(title, genre, releaseDate, rating, director);
+                _manager.AddFilm(title, genre.Value, releaseDate, rating, director);
                 Console.WriteLine("Film added successfully!");
                 success = true;
             }
@@ -239,6 +240,7 @@ public class ConsoleUi(IManager manager)
             }
         }
     }
+
     
     private void AddActor()
     {

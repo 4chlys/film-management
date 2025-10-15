@@ -1,4 +1,6 @@
-﻿namespace FilmManagement.BL.Domain;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FilmManagement.BL.Domain;
 
 public enum Genre
 {
@@ -7,6 +9,7 @@ public enum Genre
     Drama = 3,
     Horror = 4,
     Romance = 5,
+    [Display(Name = "Science Fiction")]
     SciFi = 6,
     Thriller = 7,
     Documentary = 8
