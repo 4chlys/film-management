@@ -4,7 +4,7 @@ namespace FilmManagement.BL.Domain;
 
 public class FilmDirector : IValidatableObject
 {
-    private readonly List<Film> _films = [];
+    private readonly ICollection<Film> _films = [];
 
     [Required]
     [StringLength(100, MinimumLength = 3)]

@@ -4,7 +4,7 @@ namespace FilmManagement.BL.Domain;
 
 public class Film : IValidatableObject
 {
-    private readonly List<Actor> _actors = [];
+    private readonly ICollection<Actor> _actors = [];
     
     [Required]
     [StringLength(100, MinimumLength = 3)]
@@ -12,7 +12,6 @@ public class Film : IValidatableObject
     
     public Genre Genre { get; set; }
     
-    [DataType(DataType.Date)]
     public DateTime ReleaseDate { get; set; }
     
     [Range(0, 10)]

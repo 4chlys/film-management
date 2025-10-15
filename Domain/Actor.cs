@@ -4,7 +4,7 @@ namespace FilmManagement.BL.Domain;
 
 public class Actor : IValidatableObject
 {
-    private readonly List<Film> _films = [];
+    private readonly ICollection<Film> _films = [];
 
     [Required]
     [StringLength(100, MinimumLength = 3)]
@@ -13,7 +13,6 @@ public class Actor : IValidatableObject
     [StringLength(50, MinimumLength = 2)]
     public string Nationality { get; set; } = string.Empty;
     
-    [DataType(DataType.Date)]
     public DateTime DateOfBirth { get; set; }
     
     [Range(0, 150)]

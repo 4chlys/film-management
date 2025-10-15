@@ -2,7 +2,7 @@ namespace FilmManagement.UI.CA.Extensions;
 
 using FilmManagement.BL.Domain;
 
-public static class FilmDirectorExtension
+public static class FilmDirectorExtensions
 {
     public static string GetInfo(this FilmDirector director)
     {
