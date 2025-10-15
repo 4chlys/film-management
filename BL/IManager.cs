@@ -16,14 +16,16 @@ public interface IManager
     Actor AddActor(string name, string nationality, DateTime dateOfBirth, int? age);
     Actor GetActor(string imdbId);  
     IEnumerable<Actor> GetActors();
-    IEnumerable<Actor> GetActorsByNationality(string nationality);
-    IEnumerable<Actor> GetActorsByAge(int age);
+    IEnumerable<Actor> GetActorsByCriteria(string nameFilter, int? minimumAge);
     void ChangeActors(IEnumerable<Actor> actors);
     void RemoveActor(Actor actor);
     
     FilmDirector AddDirector(string name, string country, int? yearStarted); 
-    FilmDirector GetDirector(string imdbId); 
+    FilmDirector GetDirector(string imdbId);
+    FilmDirector GetDirectorByName(string name);
     IEnumerable<FilmDirector> GetDirectors();
     void ChangeDirectors(IEnumerable<FilmDirector> directors);
     void RemoveDirector(FilmDirector director);
+    
+    IEnumerable<Genre> GetAllGenres();
 }

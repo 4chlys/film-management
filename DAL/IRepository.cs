@@ -14,13 +14,14 @@ public interface IRepository
     void CreateActor(Actor actor);
     Actor ReadActor(string imdbId);   
     IEnumerable<Actor> ReadAllActors();
-    IEnumerable<Actor> ReadActorsByNationality(string nationality);  
-    IEnumerable<Actor> ReadActorsByAge(int age); 
+    IEnumerable<Actor> ReadActorsByNamePart(string namePart);
+    IEnumerable<Actor> ReadActorsByMinimumAge(int minimumAge);
     void UpdateActors(IEnumerable<Actor> actors);
     void DeleteActor(Actor actor);
     
     void CreateDirector(FilmDirector director); 
     FilmDirector ReadDirector(string imdbId);
+    FilmDirector ReadDirectorByName(string name);
     IEnumerable<FilmDirector> ReadAllDirectors();
     void UpdateDirectors(IEnumerable<FilmDirector> directors);
     void DeleteDirector(FilmDirector director);

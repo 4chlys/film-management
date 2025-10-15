@@ -31,7 +31,6 @@ public class Repository : IRepository
 
     public void UpdateFilms(IEnumerable<Film> films)
     {
-        
         foreach (var film in films)
         {
             var existing = InMemoryStorage.Films.FirstOrDefault(f => f.ImdbId == film.ImdbId);
@@ -69,14 +68,16 @@ public class Repository : IRepository
         return InMemoryStorage.Actors;
     }
 
-    public IEnumerable<Actor> ReadActorsByNationality(string nationality)
+    public IEnumerable<Actor> ReadActorsByNamePart(string namePart)
     {
-        return InMemoryStorage.Actors.Where(a => a.Nationality == nationality);       
+        return InMemoryStorage.Actors
+            .Where(a => a.Name.Contains(namePart, StringComparison.OrdinalIgnoreCase));
     }
 
-    public IEnumerable<Actor> ReadActorsByAge(int age)
+    public IEnumerable<Actor> ReadActorsByMinimumAge(int minimumAge)
     {
-        return InMemoryStorage.Actors.Where(a => a.Age == age);       
+        return InMemoryStorage.Actors
+            .Where(a => a.Age.HasValue && a.Age >= minimumAge);
     }
 
     public void UpdateActors(IEnumerable<Actor> actors)
@@ -110,6 +111,12 @@ public class Repository : IRepository
     public FilmDirector ReadDirector(string imdbId)
     {
         return InMemoryStorage.FilmDirectors.FirstOrDefault(d => d.ImdbId == imdbId);       
+    }
+
+    public FilmDirector ReadDirectorByName(string name)
+    {
+        return InMemoryStorage.FilmDirectors
+            .FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
     }
 
     public IEnumerable<FilmDirector> ReadAllDirectors()

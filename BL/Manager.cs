@@ -88,14 +88,25 @@ public class Manager(IRepository repository) : IManager
         return repository.ReadAllActors();
     }
 
-    public IEnumerable<Actor> GetActorsByNationality(string nationality)
+    public IEnumerable<Actor> GetActorsByCriteria(string nameFilter, int? minimumAge)
     {
-        return repository.ReadActorsByNationality(nationality);       
-    }
+        IEnumerable<Actor> actors;
+        
+        if (!string.IsNullOrWhiteSpace(nameFilter))
+        {
+            actors = repository.ReadActorsByNamePart(nameFilter);
+        }
+        else
+        {
+            actors = repository.ReadAllActors();
+        }
+        
+        if (minimumAge.HasValue)
+        {
+            actors = actors.Where(a => a.Age.HasValue && a.Age >= minimumAge.Value);
+        }
 
-    public IEnumerable<Actor> GetActorsByAge(int age)
-    {
-        return repository.ReadActorsByAge(age);       
+        return actors;
     }
 
     public void ChangeActors(IEnumerable<Actor> actors)
@@ -131,6 +142,11 @@ public class Manager(IRepository repository) : IManager
         return repository.ReadDirector(imdbId);      
     }
 
+    public FilmDirector GetDirectorByName(string name)
+    {
+        return repository.ReadDirectorByName(name);
+    }
+
     public IEnumerable<FilmDirector> GetDirectors()
     {
         return repository.ReadAllDirectors();
@@ -148,5 +164,10 @@ public class Manager(IRepository repository) : IManager
     public void RemoveDirector(FilmDirector director)
     {
         repository.DeleteDirector(director);
+    }
+
+    public IEnumerable<Genre> GetAllGenres()
+    {
+        return Enum.GetValues<Genre>();
     }
 }
