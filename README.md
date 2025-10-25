@@ -68,7 +68,7 @@ classDiagram
     class DataService {
         +List~Actor~ Actors
         +List~Film~ Films
-        +List~FilmDirector~ Directors
+        +List~FilmDirectors~ Directors
         +Seed() void
     }
 
@@ -108,3 +108,41 @@ classDiagram
     Program ..> DataService : creates
     Program ..> MenuService : creates
 ```
+
+## Sprint 3
+
+### Beide zoekcriteria ingevuld
+
+```sql
+SELECT "a"."ImdbId", "a"."Age", "a"."DateOfBirth", "a"."Name", "a"."Nationality"
+FROM "Actors" AS "a"
+WHERE instr(upper("a"."Name"), @__ToUpper_0) > 0 AND "a"."Age" >= @__minimumAge_1
+-- Name = "Emma" AND MinimumAge = 20
+```
+
+### Enkel zoeken op naam
+
+```sql
+SELECT "a"."ImdbId", "a"."Age", "a"."DateOfBirth", "a"."Name", "a"."Nationality"
+FROM "Actors" AS "a"
+WHERE instr(upper("a"."Name"), @__ToUpper_0) > 0
+-- Name = "Emma"
+```
+
+### Enkel zoeken op minimum leeftijd
+
+```sql
+SELECT "a"."ImdbId", "a"."Age", "a"."DateOfBirth", "a"."Name", "a"."Nationality"
+FROM "Actors" AS "a"
+WHERE "a"."Age" >= @__minimumAge_0
+-- Example: MinimumAge = 20
+```
+
+### Beide zoekcriteria leeg
+
+```sql
+SELECT "a"."ImdbId", "a"."Age", "a"."DateOfBirth", "a"."Name", "a"."Nationality"
+FROM "Actors" AS "a"
+```
+
+---

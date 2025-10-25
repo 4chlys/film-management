@@ -9,6 +9,34 @@ public class ConsoleUi(IManager manager)
 {
     private IManager _manager = manager;
 
+    public void Run()
+    {
+        bool running = true;
+        
+        while (running)
+        {
+            ShowMainMenu();
+        
+            if (int.TryParse(Console.ReadLine(), out int choice))
+            {
+                if (choice == 0)
+                {
+                    running = false;
+                    Console.WriteLine("Goodbye!");
+                }
+                else
+                {
+                    HandleMenuChoice(choice);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Please enter a valid number.");
+            }
+
+        }
+    }
+
     private void DisplayValidationErrors(string errorMessage)
     {
         var errors = errorMessage.Split('|', StringSplitOptions.RemoveEmptyEntries);
@@ -27,7 +55,7 @@ public class ConsoleUi(IManager manager)
         Console.WriteLine("1) Show all films");
         Console.WriteLine("2) Show films by genre");
         Console.WriteLine("3) Show all actors");
-        Console.WriteLine("4) Show actors with name and/or age");
+        Console.WriteLine("4) Show actors with name and/or minimum age");
         Console.WriteLine("5) Add a film");
         Console.WriteLine("6) Add an actor");
         Console.Write("Choice (0-6): ");
@@ -240,13 +268,12 @@ public class ConsoleUi(IManager manager)
             }
         }
     }
-
     
     private void AddActor()
     {
         Console.WriteLine("\nAdd actor");
         Console.WriteLine("=========");
-        
+    
         bool success = false;
         while (!success)
         {
@@ -254,10 +281,10 @@ public class ConsoleUi(IManager manager)
             {
                 Console.Write("Name: ");
                 string name = Console.ReadLine() ?? "";
-                
+            
                 Console.Write("Nationality: ");
                 string nationality = Console.ReadLine() ?? "";
-                
+            
                 Console.Write("Date of birth (yyyy-MM-dd): ");
                 string dateOfBirthInput = Console.ReadLine() ?? "";
                 if (!DateTime.TryParse(dateOfBirthInput, out var dateOfBirth))
@@ -266,25 +293,8 @@ public class ConsoleUi(IManager manager)
                     Console.WriteLine("Please try again...\n");
                     continue;
                 }
-                
-                Console.Write("Age (optional, leave blank to auto-calculate): ");
-                string ageInput = Console.ReadLine() ?? "";
-                int? age = null;
-                if (!string.IsNullOrWhiteSpace(ageInput))
-                {
-                    if (int.TryParse(ageInput, out int parsedAge))
-                    {
-                        age = parsedAge;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Error: Invalid age.");
-                        Console.WriteLine("Please try again...\n");
-                        continue;
-                    }
-                }
-                
-                _manager.AddActor(name, nationality, dateOfBirth, age);
+            
+                _manager.AddActor(name, nationality, dateOfBirth);
                 Console.WriteLine("Actor added successfully!");
                 success = true;
             }

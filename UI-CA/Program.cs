@@ -1,34 +1,31 @@
 ﻿using FilmManagement.BL;
-using FilmManagement.DAL;
+using FilmManagement.DAL.EF;
 using FilmManagement.UI.CA;
+using Microsoft.EntityFrameworkCore;
 
-DummyDataSeeder.Seed();
+string solutionRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"../../../.."));
+string dbPath = Path.Combine(solutionRoot, "filmmanagement.db");
 
-IRepository repository = new Repository();
-IManager manager = new Manager(repository);
-ConsoleUi consoleUi = new ConsoleUi(manager);
-
-Console.WriteLine("Welcome to Film Management System!");
-    
-bool running = true;
-while (running)
+string dbDirectory = Path.GetDirectoryName(dbPath);
+if (!Directory.Exists(dbDirectory))
 {
-    consoleUi.ShowMainMenu();
-        
-    if (int.TryParse(Console.ReadLine(), out int choice))
-    {
-        if (choice == 0)
-        {
-            running = false;
-            Console.WriteLine("Goodbye!");
-        }
-        else
-        {
-            consoleUi.HandleMenuChoice(choice);
-        }
-    }
-    else
-    {
-        Console.WriteLine("Please enter a valid number.");
-    }
+    Directory.CreateDirectory(dbDirectory ?? string.Empty);
 }
+
+string connectionString = $"Data source={dbPath}";
+
+DbContextOptionsBuilder optionsBuilder = new DbContextOptionsBuilder();
+optionsBuilder.UseSqlite(connectionString);
+FilmDbContext context = new FilmDbContext(optionsBuilder.Options);
+
+if (context.CreateDatabase(dropDatabase: true))
+{
+    DataSeeder.Seed(context);
+}
+
+IRepository bookRepository = new Repository(context);
+IManager bookManager = new Manager(bookRepository);
+ConsoleUi consoleUi = new ConsoleUi(bookManager);
+
+consoleUi.Run();
+
