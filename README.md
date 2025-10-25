@@ -6,7 +6,9 @@
 * Klasgroep: INF-202A
 * Onderwerp: Film, Actor, FilmDirector
 
-## UML Class Diagram
+## Sprint 1 
+
+### UML Class Diagram
 
 ```mermaid
 classDiagram
