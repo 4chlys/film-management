@@ -1,14 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 using FilmManagement.BL.Domain;
 using FilmManagement.DAL;
+using FilmManagement.DAL.EF;
 
 namespace FilmManagement.BL;
 
 public class Manager(IRepository repository) : IManager
 {
-    private void ValidateEntity<T>(T entity)
+    private static void ValidateEntity<T>(T entity)
     {
-        List<ValidationResult> errors = new List<ValidationResult>();
+        var errors = new List<ValidationResult>();
         bool isValid = Validator.TryValidateObject(entity, 
             new ValidationContext(entity),
             errors, validateAllProperties: true);
@@ -34,7 +35,7 @@ public class Manager(IRepository repository) : IManager
         return filmToCreate;
     }
 
-    public Film GetFilm(string imdbId)
+    public Film GetFilm(Guid imdbId)
     {
         return repository.ReadFilm(imdbId);       
     }
@@ -63,22 +64,21 @@ public class Manager(IRepository repository) : IManager
         repository.DeleteFilm(film);
     }
 
-    public Actor AddActor(string name, string nationality, DateTime dateOfBirth, int? age)
+    public Actor AddActor(string name, string nationality, DateTime dateOfBirth)
     {
         var actorToCreate = new Actor
         {
             Name = name,
             Nationality = nationality,
-            DateOfBirth = dateOfBirth,
-            Age = age
+            DateOfBirth = dateOfBirth
         };
-        
+    
         ValidateEntity(actorToCreate);
         repository.CreateActor(actorToCreate);
         return actorToCreate;
     }
 
-    public Actor GetActor(string imdbId)
+    public Actor GetActor(Guid imdbId)
     {
         return repository.ReadActor(imdbId);       
     }
@@ -90,23 +90,7 @@ public class Manager(IRepository repository) : IManager
 
     public IEnumerable<Actor> GetActorsByCriteria(string nameFilter, int? minimumAge)
     {
-        IEnumerable<Actor> actors;
-        
-        if (!string.IsNullOrWhiteSpace(nameFilter))
-        {
-            actors = repository.ReadActorsByNamePart(nameFilter);
-        }
-        else
-        {
-            actors = repository.ReadAllActors();
-        }
-        
-        if (minimumAge.HasValue)
-        {
-            actors = actors.Where(a => a.Age.HasValue && a.Age >= minimumAge.Value);
-        }
-
-        return actors;
+        return repository.ReadActorsByCriteria(nameFilter, minimumAge);
     }
 
     public void ChangeActors(IEnumerable<Actor> actors)
@@ -137,7 +121,7 @@ public class Manager(IRepository repository) : IManager
         return filmDirectorToCreate;
     }
 
-    public FilmDirector GetDirector(string imdbId)
+    public FilmDirector GetDirector(Guid imdbId)
     {
         return repository.ReadDirector(imdbId);      
     }
