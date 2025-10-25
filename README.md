@@ -135,7 +135,7 @@ WHERE instr(upper("a"."Name"), @__ToUpper_0) > 0
 SELECT "a"."ImdbId", "a"."Age", "a"."DateOfBirth", "a"."Name", "a"."Nationality"
 FROM "Actors" AS "a"
 WHERE "a"."Age" >= @__minimumAge_0
--- Example: MinimumAge = 20
+-- MinimumAge = 20
 ```
 
 ### Beide zoekcriteria leeg
