@@ -1,11 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
-namespace FilmManagement.BL.Domain;
+using System.ComponentModel.DataAnnotations.Schema;
+using FilmManagement.BL.Domain;
 
 public class Actor : IValidatableObject
 {
     private readonly ICollection<Film> _films = [];
 
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid ImdbId { get; set; }
+    
     [Required]
     [StringLength(100, MinimumLength = 3)]
     public string Name { get; set; } = string.Empty;
@@ -13,16 +17,22 @@ public class Actor : IValidatableObject
     [StringLength(50, MinimumLength = 2)]
     public string Nationality { get; set; } = string.Empty;
     
-    public DateTime DateOfBirth { get; set; }
+    private DateTime _dateOfBirth;
+    
+    public DateTime DateOfBirth 
+    { 
+        get => _dateOfBirth;
+        set
+        {
+            _dateOfBirth = value;
+            Age = CalculateAge(value);
+        }
+    }
     
     [Range(0, 150)]
-    public int? Age { get; set; }
-    
-    [Key]
-    [StringLength(9, MinimumLength = 9, ErrorMessage = "IMDb ID must be exactly 9 characters")]
-    [RegularExpression(@"^nm\d{7,8}$", ErrorMessage = "IMDb ID must start with 'nm' followed by 7 digits")]
-    public string ImdbId { get; set; } = string.Empty;
+    public int Age { get; private set; }
 
+    [NotMapped]
     public ICollection<Film> Films => _films;
     
     public void AddFilm(Film film) => _films.Add(film);
@@ -45,24 +55,20 @@ public class Actor : IValidatableObject
                 [nameof(DateOfBirth)]));
         }
 
-        if (!Age.HasValue) return errors;
-        int calculatedAge = CalculateAge();
-        if (Math.Abs(Age.Value - calculatedAge) > 1)
-        {
-            errors.Add(new ValidationResult(
-                $"Provided age ({Age}) doesn't match date of birth (calculated age: {calculatedAge})!",
-                [nameof(Age)]));
-        }
-
         return errors;
     }
 
-    private int CalculateAge()
+    private static int CalculateAge(DateTime dateOfBirth)
     {
         var today = DateTime.Today;
-        int age = today.Year - DateOfBirth.Year;
-        if (DateOfBirth.Date > today.AddYears(-age))
+        int age = today.Year - dateOfBirth.Year;
+        if (dateOfBirth.Date > today.AddYears(-age))
             age--;
         return age;
+    }
+    
+    public void RefreshAge()
+    {
+        Age = CalculateAge(DateOfBirth);
     }
 }

@@ -1,10 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FilmManagement.BL.Domain;
 
 public class Film : IValidatableObject
 {
     private readonly ICollection<Actor> _actors = [];
+    
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid ImdbId { get; set; }
     
     [Required]
     [StringLength(100, MinimumLength = 3)]
@@ -17,13 +22,10 @@ public class Film : IValidatableObject
     [Range(0, 10)]
     public double Rating { get; set; }
     
+    [NotMapped]
     public FilmDirector Director { get; set; }
     
-    [Key]
-    [StringLength(9, MinimumLength = 9, ErrorMessage = "IMDb ID must be exactly 9 characters")]
-    [RegularExpression(@"^tt\d{7,8}$", ErrorMessage = "IMDb ID must start with 'tt' followed by 7 digits")]
-    public string ImdbId { get; set; } = string.Empty;
-    
+    [NotMapped]
     public ICollection<Actor> Actors => _actors;
     
     public void AddActor(Actor actor) => _actors.Add(actor);

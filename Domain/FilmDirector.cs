@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FilmManagement.BL.Domain;
 
@@ -6,6 +7,10 @@ public class FilmDirector : IValidatableObject
 {
     private readonly ICollection<Film> _films = [];
 
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid ImdbId { get; set; }
+    
     [Required]
     [StringLength(100, MinimumLength = 3)]
     public string Name { get; set; } = string.Empty;
@@ -14,12 +19,8 @@ public class FilmDirector : IValidatableObject
     public string Country { get; set; } = string.Empty;
     
     public int? YearStarted { get; set; } 
-    
-    [Key]
-    [StringLength(9, MinimumLength = 9, ErrorMessage = "IMDb ID must be exactly 9 characters")]
-    [RegularExpression(@"^nm\d{7,8}$", ErrorMessage = "IMDb ID must start with 'nm' followed by 7 digits")]
-    public string ImdbId { get; set; } = string.Empty;
 
+    [NotMapped]
     public ICollection<Film> Films => _films;
     
     public void AddFilm(Film film) => _films.Add(film);
