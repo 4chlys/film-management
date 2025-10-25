@@ -2,21 +2,18 @@ using FilmManagement.BL.Domain;
 
 namespace FilmManagement.DAL;
 
-public class Repository : IRepository
+public class InMemoryInMemoryRepository : IInMemoryRepository
 {
     //Film operations   
     public void CreateFilm(Film film)
     {
-        if (string.IsNullOrEmpty(film.ImdbId))
-        {
-            film.ImdbId = ImdbIdGenerator.GenerateFilmId();
-        }
+        film.ImdbId = Guid.NewGuid();
         InMemoryStorage.Films.Add(film);
     }
 
-    public Film ReadFilm(string imdbId)
+    public Film ReadFilm(Guid imdbId)
     {
-        return InMemoryStorage.Films.FirstOrDefault(f => f.ImdbId == imdbId);       
+        return InMemoryStorage.Films.SingleOrDefault(f => f.ImdbId == imdbId);       
     }
 
     public IEnumerable<Film> ReadAllFilms()
@@ -33,8 +30,12 @@ public class Repository : IRepository
     {
         foreach (var film in films)
         {
-            var existing = InMemoryStorage.Films.FirstOrDefault(f => f.ImdbId == film.ImdbId);
-            if (existing == null) continue;
+            var existing = InMemoryStorage.Films.SingleOrDefault(f => f.ImdbId == film.ImdbId);
+            if (existing == null)
+            {
+                CreateFilm(film);
+                continue;
+            }
             existing.Title = film.Title;
             existing.Genre = film.Genre;
             existing.ReleaseDate = film.ReleaseDate;
@@ -51,16 +52,13 @@ public class Repository : IRepository
     //Actor operations  
     public void CreateActor(Actor actor)
     {
-        if (string.IsNullOrEmpty(actor.ImdbId))
-        {
-            actor.ImdbId = ImdbIdGenerator.GenerateActorId();
-        }
+        actor.ImdbId = Guid.NewGuid();
         InMemoryStorage.Actors.Add(actor);
     }
 
-    public Actor ReadActor(string imdbId)
+    public Actor ReadActor(Guid imdbId)
     {
-        return InMemoryStorage.Actors.FirstOrDefault(a => a.ImdbId == imdbId);       
+        return InMemoryStorage.Actors.SingleOrDefault(a => a.ImdbId == imdbId);       
     }
 
     public IEnumerable<Actor> ReadAllActors()
@@ -77,19 +75,22 @@ public class Repository : IRepository
     public IEnumerable<Actor> ReadActorsByMinimumAge(int minimumAge)
     {
         return InMemoryStorage.Actors
-            .Where(a => a.Age.HasValue && a.Age >= minimumAge);
+            .Where(a => a.Age >= minimumAge);
     }
 
     public void UpdateActors(IEnumerable<Actor> actors)
     {
         foreach (var actor in actors)
         {
-            var existing = InMemoryStorage.Actors.FirstOrDefault(a => a.ImdbId == actor.ImdbId);
-            if (existing == null) continue;
+            var existing = InMemoryStorage.Actors.SingleOrDefault(a => a.ImdbId == actor.ImdbId);
+            if (existing == null)
+            {
+                CreateActor(actor);
+                continue;
+            }
             existing.Name = actor.Name;
             existing.Nationality = actor.Nationality;
             existing.DateOfBirth = actor.DateOfBirth;
-            existing.Age = actor.Age;
         }
     }
 
@@ -101,22 +102,19 @@ public class Repository : IRepository
     //Director operations
     public void CreateDirector(FilmDirector director)
     {
-        if (string.IsNullOrEmpty(director.ImdbId))
-        {
-            director.ImdbId = ImdbIdGenerator.GenerateDirectorId();
-        }
+        director.ImdbId = Guid.NewGuid();
         InMemoryStorage.FilmDirectors.Add(director);
     }
 
-    public FilmDirector ReadDirector(string imdbId)
+    public FilmDirector ReadDirector(Guid imdbId)
     {
-        return InMemoryStorage.FilmDirectors.FirstOrDefault(d => d.ImdbId == imdbId);       
+        return InMemoryStorage.FilmDirectors.SingleOrDefault(d => d.ImdbId == imdbId);       
     }
 
     public FilmDirector ReadDirectorByName(string name)
     {
         return InMemoryStorage.FilmDirectors
-            .FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            .SingleOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
     }
 
     public IEnumerable<FilmDirector> ReadAllDirectors()
@@ -129,7 +127,11 @@ public class Repository : IRepository
         foreach (var director in directors)
         {
             var existing = InMemoryStorage.FilmDirectors.FirstOrDefault(d => d.ImdbId == director.ImdbId);
-            if (existing == null) continue;
+            if (existing == null)
+            {
+                CreateDirector(director);
+                continue;
+            }
             existing.Name = director.Name;
             existing.Country = director.Country;
             existing.YearStarted = director.YearStarted;
