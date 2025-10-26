@@ -23,9 +23,9 @@ if (context.CreateDatabase(dropDatabase: true))
     DataSeeder.Seed(context);
 }
 
-IRepository bookRepository = new Repository(context);
-IManager bookManager = new Manager(bookRepository);
-ConsoleUi consoleUi = new ConsoleUi(bookManager);
+IRepository filmRepository = new Repository(context);
+IManager filmManager = new Manager(filmRepository);
+ConsoleUi consoleUi = new ConsoleUi(filmManager);
 
 consoleUi.Run();
 

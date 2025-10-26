@@ -37,8 +37,8 @@ public class Repository(FilmDbContext context) : IRepository
         foreach (var film in films)
         {
             context.Films.Update(film);
-            context.SaveChanges();       
         }
+        context.SaveChanges();  
     }
 
     public void DeleteFilm(Film film)
@@ -85,8 +85,8 @@ public class Repository(FilmDbContext context) : IRepository
         foreach (var actor in actors)
         {
             context.Actors.Update(actor);
-            context.SaveChanges();
         }
+        context.SaveChanges();
     }
 
     public void DeleteActor(Actor actor)
@@ -122,8 +122,8 @@ public class Repository(FilmDbContext context) : IRepository
         foreach (var director in directors)
         {
             context.Directors.Update(director);
-            context.SaveChanges();
         }
+        context.SaveChanges();
     }
 
     public void DeleteDirector(FilmDirector director)
