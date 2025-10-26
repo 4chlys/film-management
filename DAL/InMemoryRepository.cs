@@ -2,7 +2,7 @@ using FilmManagement.BL.Domain;
 
 namespace FilmManagement.DAL;
 
-public class InMemoryInMemoryRepository : IInMemoryRepository
+public class InMemoryRepository : IInMemoryRepository
 {
     //Film operations   
     public void CreateFilm(Film film)
