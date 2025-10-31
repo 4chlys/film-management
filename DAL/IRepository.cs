@@ -14,7 +14,7 @@ public interface IRepository
     void CreateActor(Actor actor);
     Actor ReadActor(Guid imdbId);   
     IEnumerable<Actor> ReadAllActors();
-    public IEnumerable<Actor> ReadActorsByCriteria(string nameFilter, int? minimumAge);
+    IEnumerable<Actor> ReadActorsByCriteria(string nameFilter, int? minimumAge);
     void UpdateActors(IEnumerable<Actor> actors);
     void DeleteActor(Actor actor);
     

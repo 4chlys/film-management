@@ -74,7 +74,7 @@ public class EfRepository(FilmDbContext context) : IRepository
     
         if (minimumAge.HasValue)
         {
-            query = query.Where(a => a.Age >= minimumAge); // This now queries the DB column!
+            query = query.Where(a => a.Age >= minimumAge);
         }
     
         return query.ToList();
