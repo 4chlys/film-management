@@ -24,7 +24,7 @@ if (context.CreateDatabase(dropDatabase: true))
     DataSeeder.Seed(context);
 }
 
-IRepository filmRepository = new EFRepository(context);
+IRepository filmRepository = new EfRepository(context);
 IManager filmManager = new Manager(filmRepository);
 ConsoleUi consoleUi = new ConsoleUi(filmManager);
 
