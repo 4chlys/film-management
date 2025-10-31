@@ -37,7 +37,7 @@ public class ConsoleUi(IManager manager)
         }
     }
 
-    private void DisplayValidationErrors(string errorMessage)
+    private void ShowValidationErrors(string errorMessage)
     {
         var errors = errorMessage.Split('|', StringSplitOptions.RemoveEmptyEntries);
         Console.WriteLine("Validation errors:");
@@ -47,7 +47,7 @@ public class ConsoleUi(IManager manager)
         }
     }
 
-    public void ShowMainMenu()
+    private void ShowMainMenu()
     {
         Console.WriteLine("\nWhat would you like to do?");
         Console.WriteLine("==========================");
@@ -61,7 +61,7 @@ public class ConsoleUi(IManager manager)
         Console.Write("Choice (0-6): ");
     }
 
-    public void HandleMenuChoice(int choice)
+    private void HandleMenuChoice(int choice)
     {
         switch (choice)
         {
@@ -257,7 +257,7 @@ public class ConsoleUi(IManager manager)
                     }
                     catch (ValidationException ex)
                     {
-                        DisplayValidationErrors(ex.Message);
+                        ShowValidationErrors(ex.Message);
                         Console.WriteLine("Please try again...\n");
                         continue;
                     }
@@ -269,7 +269,7 @@ public class ConsoleUi(IManager manager)
             }
             catch (ValidationException ex)
             {
-                DisplayValidationErrors(ex.Message);
+                ShowValidationErrors(ex.Message);
                 Console.WriteLine("Please try again...\n");
             }
         }
@@ -322,7 +322,7 @@ public class ConsoleUi(IManager manager)
             }
             catch (ValidationException ex)
             {
-                DisplayValidationErrors(ex.Message);
+                ShowValidationErrors(ex.Message);
                 Console.WriteLine("Please try again...\n");
             }
         }

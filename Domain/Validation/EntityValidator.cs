@@ -13,6 +13,6 @@ public static class EntityValidator
 
         if (isValid) return;
         var errorMessages = errors.Select(e => e.ErrorMessage);
-        throw new ArgumentException(string.Join(" | ", errorMessages));
+        throw new ValidationException(string.Join(" | ", errorMessages));
     }
 }
