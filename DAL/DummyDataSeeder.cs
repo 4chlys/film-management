@@ -6,8 +6,6 @@ public static class DummyDataSeeder
 {
     public static void Seed()
     {
-        ImdbIdGenerator.Reset();
-        
         // Create directors (not part of many-to-many, just needed for films)
         var lanthimos = new FilmDirector 
         { 

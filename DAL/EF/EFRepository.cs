@@ -2,7 +2,7 @@ using FilmManagement.BL.Domain;
 
 namespace FilmManagement.DAL.EF;
 
-public class Repository(FilmDbContext context) : IRepository
+public class EFRepository(FilmDbContext context) : IRepository
 {
     public void CreateFilm(Film film)
     {

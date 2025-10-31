@@ -1,6 +1,6 @@
 using FilmManagement.BL.Domain;
 using FilmManagement.BL.Domain.Validation;
-using FilmManagement.DAL.EF;
+using FilmManagement.DAL;
 
 namespace FilmManagement.BL;
 

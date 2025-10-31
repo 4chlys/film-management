@@ -1,4 +1,5 @@
 ﻿using FilmManagement.BL;
+using FilmManagement.DAL;
 using FilmManagement.DAL.EF;
 using FilmManagement.UI.CA;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ if (context.CreateDatabase(dropDatabase: true))
     DataSeeder.Seed(context);
 }
 
-IRepository filmRepository = new Repository(context);
+IRepository filmRepository = new EFRepository(context);
 IManager filmManager = new Manager(filmRepository);
 ConsoleUi consoleUi = new ConsoleUi(filmManager);
 

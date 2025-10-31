@@ -2,7 +2,7 @@ using FilmManagement.BL.Domain;
 
 namespace FilmManagement.DAL;
 
-public interface IInMemoryRepository
+public interface IRepository
 {
     void CreateFilm(Film film);
     Film ReadFilm(Guid imdbId);
@@ -14,8 +14,7 @@ public interface IInMemoryRepository
     void CreateActor(Actor actor);
     Actor ReadActor(Guid imdbId);   
     IEnumerable<Actor> ReadAllActors();
-    IEnumerable<Actor> ReadActorsByNamePart(string namePart);
-    IEnumerable<Actor> ReadActorsByMinimumAge(int minimumAge);
+    public IEnumerable<Actor> ReadActorsByCriteria(string nameFilter, int? minimumAge);
     void UpdateActors(IEnumerable<Actor> actors);
     void DeleteActor(Actor actor);
     

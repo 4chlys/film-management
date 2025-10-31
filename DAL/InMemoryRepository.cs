@@ -1,8 +1,9 @@
 using FilmManagement.BL.Domain;
+using FilmManagement.DAL.EF;
 
 namespace FilmManagement.DAL;
 
-public class InMemoryRepository : IInMemoryRepository
+public class InMemoryRepository : IRepository
 {
     //Film operations   
     public void CreateFilm(Film film)
@@ -66,16 +67,21 @@ public class InMemoryRepository : IInMemoryRepository
         return InMemoryStorage.Actors;
     }
 
-    public IEnumerable<Actor> ReadActorsByNamePart(string namePart)
+    public IEnumerable<Actor> ReadActorsByCriteria(string nameFilter, int? minimumAge)
     {
-        return InMemoryStorage.Actors
-            .Where(a => a.Name.Contains(namePart, StringComparison.OrdinalIgnoreCase));
-    }
-
-    public IEnumerable<Actor> ReadActorsByMinimumAge(int minimumAge)
-    {
-        return InMemoryStorage.Actors
-            .Where(a => a.Age >= minimumAge);
+        var actors = ReadAllActors();
+    
+        if (!string.IsNullOrWhiteSpace(nameFilter))
+        {
+            actors = actors.Where(a => a.Name.ToUpper().Contains(nameFilter.ToUpper()));
+        }
+    
+        if (minimumAge.HasValue)
+        {
+            actors = actors.Where(a => a.Age >= minimumAge.Value);
+        }
+    
+        return actors;
     }
 
     public void UpdateActors(IEnumerable<Actor> actors)
