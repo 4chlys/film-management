@@ -1,24 +1,11 @@
-using System.ComponentModel.DataAnnotations;
 using FilmManagement.BL.Domain;
-using FilmManagement.DAL;
+using FilmManagement.BL.Domain.Validation;
 using FilmManagement.DAL.EF;
 
 namespace FilmManagement.BL;
 
 public class Manager(IRepository repository) : IManager
 {
-    private static void ValidateEntity<T>(T entity)
-    {
-        var errors = new List<ValidationResult>();
-        bool isValid = Validator.TryValidateObject(entity, 
-            new ValidationContext(entity),
-            errors, validateAllProperties: true);
-
-        if (isValid) return;
-        var errorMessages = errors.Select(e => e.ErrorMessage);
-        throw new ArgumentException(string.Join(" | ", errorMessages));
-    }
-
     public Film AddFilm(string title, Genre genre, DateTime releaseDate, double rating, FilmDirector director)
     {
         var filmToCreate = new Film
@@ -30,7 +17,7 @@ public class Manager(IRepository repository) : IManager
             Director = director
         };
         
-        ValidateEntity(filmToCreate);
+        EntityValidator.ValidateEntity(filmToCreate);
         repository.CreateFilm(filmToCreate);
         return filmToCreate;
     }
@@ -54,7 +41,7 @@ public class Manager(IRepository repository) : IManager
     {
         foreach (var film in films)
         {
-            ValidateEntity(film);
+            EntityValidator.ValidateEntity(film);
         }
         repository.UpdateFilms(films);
     }
@@ -64,16 +51,17 @@ public class Manager(IRepository repository) : IManager
         repository.DeleteFilm(film);
     }
 
-    public Actor AddActor(string name, string nationality, DateTime dateOfBirth)
+    public Actor AddActor(string name, string nationality, DateTime dateOfBirth, DateTime? dateOfDeath)
     {
         var actorToCreate = new Actor
         {
             Name = name,
             Nationality = nationality,
-            DateOfBirth = dateOfBirth
+            DateOfBirth = dateOfBirth,
+            DateOfDeath = dateOfDeath      
         };
     
-        ValidateEntity(actorToCreate);
+        EntityValidator.ValidateEntity(actorToCreate);
         repository.CreateActor(actorToCreate);
         return actorToCreate;
     }
@@ -97,7 +85,7 @@ public class Manager(IRepository repository) : IManager
     {
         foreach (var actor in actors)
         {
-            ValidateEntity(actor);
+            EntityValidator.ValidateEntity(actor);
         }
         repository.UpdateActors(actors);
     }
@@ -107,7 +95,7 @@ public class Manager(IRepository repository) : IManager
         repository.DeleteActor(actor);
     }
 
-    public FilmDirector AddDirector(string name, string country, int? yearStarted)
+    public FilmDirector AddDirector(string name, string country, int? yearStarted, int? yearEnded)
     {
         var filmDirectorToCreate = new FilmDirector
         {
@@ -116,7 +104,7 @@ public class Manager(IRepository repository) : IManager
             YearStarted = yearStarted       
         };
         
-        ValidateEntity(filmDirectorToCreate);
+        EntityValidator.ValidateEntity(filmDirectorToCreate);
         repository.CreateDirector(filmDirectorToCreate);
         return filmDirectorToCreate;
     }
@@ -140,7 +128,7 @@ public class Manager(IRepository repository) : IManager
     {
         foreach (var director in directors)
         {
-            ValidateEntity(director);
+            EntityValidator.ValidateEntity(director);
         }
         repository.UpdateDirectors(directors);
     }

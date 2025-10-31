@@ -30,7 +30,7 @@ public class FilmDirector : IValidatableObject
     
     public void AddFilm(Film film) => _films.Add(film);
 
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
     {
         var errors = new List<ValidationResult>();
 

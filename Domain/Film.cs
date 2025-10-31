@@ -16,6 +16,7 @@ public class Film
     [StringLength(100, MinimumLength = 3)]
     public string Title { get; set; } = string.Empty;
     
+    [CustomValidation(typeof(EnumValidator), "DefinedValuesOnly")]
     public Genre Genre { get; set; }
     
     [DateRange(minYear: 1800, mustBePast: true)]

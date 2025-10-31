@@ -13,14 +13,14 @@ public interface IManager
     void ChangeFilms(IEnumerable<Film> films);
     void RemoveFilm(Film film);
     
-    Actor AddActor(string name, string nationality, DateTime dateOfBirth);
+    Actor AddActor(string name, string nationality, DateTime dateOfBirth, DateTime? dateOfDeath);
     Actor GetActor(Guid imdbId);  
     IEnumerable<Actor> GetActors();
     IEnumerable<Actor> GetActorsByCriteria(string nameFilter, int? minimumAge);
     void ChangeActors(IEnumerable<Actor> actors);
     void RemoveActor(Actor actor);
     
-    FilmDirector AddDirector(string name, string country, int? yearStarted); 
+    FilmDirector AddDirector(string name, string country, int? yearStarted, int? yearEnded); 
     FilmDirector GetDirector(Guid imdbId);
     FilmDirector GetDirectorByName(string name);
     IEnumerable<FilmDirector> GetDirectors();

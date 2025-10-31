@@ -8,21 +8,35 @@ public class DateRangeAttribute(int minYear = 1800, bool mustBePast = true) : Va
 {
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
-        if (value is not DateTime dateValue) return ValidationResult.Success;
-        if (mustBePast && dateValue > DateTime.Now)
+        if (value is int intValue)
         {
-            return new ValidationResult(
-                "Date should be in the past!",
-                [validationContext.MemberName]);
+            if (mustBePast && intValue > DateTime.Now.Year)
+                return new ValidationResult(
+                    "Year should be in the past!",
+                    [validationContext.MemberName]);
+            if (intValue < minYear)
+                return new ValidationResult(
+                    $"Year must be after {minYear}!",
+                    [validationContext.MemberName]);
         }
-
-        if (dateValue.Year < minYear)
+        
+        if (value is DateTime dateValue)
         {
-            return new ValidationResult(
-                $"Date must be after {minYear}!",
-                [validationContext.MemberName]);
-        }
+            if (mustBePast && dateValue > DateTime.Now)
+            {
+                return new ValidationResult(
+                    "Date should be in the past!",
+                    [validationContext.MemberName]);
+            }
 
+            if (dateValue.Year < minYear)
+            {
+                return new ValidationResult(
+                    $"Date must be after {minYear}!",
+                    [validationContext.MemberName]);
+            }
+        }
+        
         return ValidationResult.Success;
     }
 }

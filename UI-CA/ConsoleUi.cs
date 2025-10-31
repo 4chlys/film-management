@@ -241,12 +241,18 @@ public class ConsoleUi(IManager manager)
                     Console.Write("Year started (optional): ");
                     string yearInput = Console.ReadLine() ?? "";
                     int? yearStarted = null;
-                    if (int.TryParse(yearInput, out int year))
-                        yearStarted = year;
+                    if (int.TryParse(yearInput, out var yearS))
+                        yearStarted = yearS;
+                    
+                    Console.Write("Year ended (optional): ");
+                    string yearEndedInput = Console.ReadLine() ?? "";
+                    int? yearEnded = null;
+                    if (int.TryParse(yearEndedInput, out var yearE))
+                        yearEnded = yearE;
 
                     try
                     {
-                        director = _manager.AddDirector(directorInput, country, yearStarted);
+                        director = _manager.AddDirector(directorInput, country, yearStarted, yearEnded);
                         Console.WriteLine("Director created.");
                     }
                     catch (ValidationException ex)
@@ -293,8 +299,24 @@ public class ConsoleUi(IManager manager)
                     Console.WriteLine("Please try again...\n");
                     continue;
                 }
-            
-                _manager.AddActor(name, nationality, dateOfBirth);
+                
+                Console.Write("Date of death (yyyy-MM-dd) (optional): ");
+                string dateOfDeathInput = Console.ReadLine() ?? "";
+               
+                DateTime? dateOfDeath = null;
+                
+                if (!string.IsNullOrWhiteSpace(dateOfDeathInput))
+                {
+                    if (!DateTime.TryParse(dateOfDeathInput, out var parsedDate))
+                    {
+                        Console.WriteLine("Error: Invalid date format.");
+                        Console.WriteLine("Please try again...\n");
+                        continue;
+                    }
+                    dateOfDeath = parsedDate;
+                }
+                
+                _manager.AddActor(name, nationality, dateOfBirth, dateOfDeath);
                 Console.WriteLine("Actor added successfully!");
                 success = true;
             }
