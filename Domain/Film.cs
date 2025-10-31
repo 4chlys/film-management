@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FilmManagement.BL.Domain.Validation;
 
 namespace FilmManagement.BL.Domain;
 
-public class Film : IValidatableObject
+public class Film
 {
     private readonly ICollection<Actor> _actors = [];
     
@@ -17,6 +18,7 @@ public class Film : IValidatableObject
     
     public Genre Genre { get; set; }
     
+    [DateRange(minYear: 1800, mustBePast: true)]
     public DateTime ReleaseDate { get; set; }
     
     [Range(0, 10)]
@@ -29,39 +31,4 @@ public class Film : IValidatableObject
     public ICollection<Actor> Actors => _actors;
     
     public void AddActor(Actor actor) => _actors.Add(actor);
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        var errors = new List<ValidationResult>();
-        
-        if (!Enum.IsDefined(typeof(Genre), Genre))
-        {
-            errors.Add(new ValidationResult(
-                "Genre unknown!",
-                [nameof(Genre)]));
-        }
-        
-        if (ReleaseDate > DateTime.Now)
-        {
-            errors.Add(new ValidationResult(
-                "Release date cannot be in the future!",
-                [nameof(ReleaseDate)]));
-        }
-        
-        if (ReleaseDate.Year < 1888)
-        {
-            errors.Add(new ValidationResult(
-                "Release date must be after 1888 (when cinema was invented)!",
-                [nameof(ReleaseDate)]));
-        }
-        
-        if (Math.Round(Rating, 1) != Rating)
-        {
-            errors.Add(new ValidationResult(
-                "Rating can have at most one decimal place!",
-                [nameof(Rating)]));
-        }
-
-        return errors;
-    }
 }

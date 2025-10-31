@@ -18,14 +18,16 @@ public static class DataSeeder
         { 
             Name = "Stanley Kubrick", 
             Country = "USA", 
-            YearStarted = 1951
+            YearStarted = 1951,
+            YearEnded = 1999
         };
         
         var lynch = new FilmDirector 
         { 
             Name = "David Lynch", 
             Country = "USA", 
-            YearStarted = 1970
+            YearStarted = 1970,
+            YearEnded = 2006
         };
         
         var eggers = new FilmDirector 

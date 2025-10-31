@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using FilmManagement.BL.Domain;
+using FilmManagement.BL.Domain.Validation;
 
 public class Actor : IValidatableObject
 {
@@ -17,6 +18,7 @@ public class Actor : IValidatableObject
     [StringLength(50, MinimumLength = 2)]
     public string Nationality { get; set; } = string.Empty;
     
+    [DateRange(minYear:1800, mustBePast:true)]
     private DateTime _dateOfBirth;
     
     public DateTime DateOfBirth 
@@ -29,8 +31,17 @@ public class Actor : IValidatableObject
         }
     }
     
+    [DateRange(minYear: 1800, mustBePast: true)]
+    public DateTime? DateOfDeath { get; set; }
+    
     [Range(0, 150)]
-    public int Age { get; private set; }
+    private int _age;
+    
+    public int Age 
+    { 
+        get => RefreshAge();
+        private set => _age = value;
+    }
 
     [NotMapped]
     public ICollection<Film> Films => _films;
@@ -40,35 +51,36 @@ public class Actor : IValidatableObject
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         var errors = new List<ValidationResult>();
-        
-        if (DateOfBirth >= DateTime.Now)
+        if (DateOfDeath.HasValue && DateOfDeath.Value < DateOfBirth)
         {
             errors.Add(new ValidationResult(
-                "Date of birth should be in the past!",
-                [nameof(DateOfBirth)]));
+                "Date of death cannot be before date of birth!",
+                [nameof(DateOfDeath), nameof(DateOfBirth)]));       
         }
-        
-        if (DateOfBirth.Year < 1800)
-        {
-            errors.Add(new ValidationResult(
-                "Date of birth must be after 1800!",
-                [nameof(DateOfBirth)]));
-        }
-
         return errors;
     }
 
-    private static int CalculateAge(DateTime dateOfBirth)
+    private static int CalculateAge(DateTime dateOfBirth, DateTime? dateOfDeath = null)
     {
         var today = DateTime.Today;
-        int age = today.Year - dateOfBirth.Year;
-        if (dateOfBirth.Date > today.AddYears(-age))
-            age--;
-        return age;
+        if (dateOfDeath.HasValue && dateOfDeath.Value < today)
+        {
+            var age = today.Year - dateOfBirth.Year;
+            if (dateOfBirth.Date > today.AddYears(-age))
+                age--;
+            return age;       
+        }
+        else
+        {
+            var age = today.Year - dateOfBirth.Year;
+            if (dateOfBirth.Date > today.AddYears(-age))
+                age--;
+            return age;
+        }
     }
     
-    public void RefreshAge()
+    private int RefreshAge()
     {
-        Age = CalculateAge(DateOfBirth);
+        return CalculateAge(DateOfBirth);
     }
 }

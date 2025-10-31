@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FilmManagement.BL.Domain.Validation;
 
 namespace FilmManagement.BL.Domain;
 
@@ -18,7 +19,11 @@ public class FilmDirector : IValidatableObject
     [StringLength(50, MinimumLength = 2)]
     public string Country { get; set; } = string.Empty;
     
+    [DateRange(minYear: 1800, mustBePast: true)]
     public int? YearStarted { get; set; } 
+    
+    [DateRange(minYear: 1800, mustBePast: true)]
+    public int? YearEnded { get; set; }
 
     [NotMapped]
     public ICollection<Film> Films => _films;
@@ -29,23 +34,15 @@ public class FilmDirector : IValidatableObject
     {
         var errors = new List<ValidationResult>();
 
-        if (YearStarted.HasValue)
+        if (YearStarted.HasValue && YearEnded.HasValue)
         {
-            if (YearStarted.Value < 1888)
+            if (YearStarted.Value > YearEnded.Value)
             {
                 errors.Add(new ValidationResult(
-                    "Year started must be after 1888 (invention of cinema)!",
-                    [nameof(YearStarted)]));
-            }
-            
-            if (YearStarted.Value > DateTime.Now.Year)
-            {
-                errors.Add(new ValidationResult(
-                    "Year started cannot be in the future!",
-                    [nameof(YearStarted)]));
+                    "Year started cannot be after year ended!",
+                    [nameof(YearStarted), nameof(YearEnded)]));
             }
         }
-
         return errors;
     }
 }
