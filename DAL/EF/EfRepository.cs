@@ -60,24 +60,21 @@ public class EfRepository(FilmDbContext context) : IRepository
 
     public IEnumerable<Actor> ReadAllActors()
     {
-        return context.Actors.ToList();   
+        return context.Actors.ToList();
     }
 
-    public IEnumerable<Actor> ReadActorsByCriteria(string nameFilter, int? minimumAge)
+    public IEnumerable<Actor> ReadActorsByName(string nameFilter)
     {
-        var query = context.Actors.AsQueryable();
-    
-        if (!string.IsNullOrWhiteSpace(nameFilter))
-        {
-            query = query.Where(a => a.Name.ToUpper().Contains(nameFilter.ToUpper()));
-        }
-    
-        if (minimumAge.HasValue)
-        {
-            query = query.Where(a => a.Age >= minimumAge);
-        }
-    
-        return query.ToList();
+        return context.Actors
+            .Where(a => a.Name.ToUpper().Contains(nameFilter.ToUpper()))
+            .ToList();
+    }
+
+    public IEnumerable<Actor> ReadActorsByMaxDateOfBirth(DateTime maxDateOfBirth)
+    {
+        return context.Actors
+            .Where(a => a.DateOfBirth <= maxDateOfBirth)
+            .ToList();
     }
 
     public void UpdateActors(IEnumerable<Actor> actors)

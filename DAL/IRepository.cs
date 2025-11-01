@@ -12,9 +12,10 @@ public interface IRepository
     void DeleteFilm(Film film);
     
     void CreateActor(Actor actor);
-    Actor ReadActor(Guid imdbId);   
+    Actor ReadActor(Guid imdbId);  
     IEnumerable<Actor> ReadAllActors();
-    IEnumerable<Actor> ReadActorsByCriteria(string nameFilter, int? minimumAge);
+    IEnumerable<Actor> ReadActorsByName(string nameFilter);
+    IEnumerable<Actor> ReadActorsByMaxDateOfBirth(DateTime maxDateOfBirth);
     void UpdateActors(IEnumerable<Actor> actors);
     void DeleteActor(Actor actor);
     

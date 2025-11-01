@@ -78,7 +78,32 @@ public class Manager(IRepository repository) : IManager
 
     public IEnumerable<Actor> GetActorsByCriteria(string nameFilter, int? minimumAge)
     {
-        return repository.ReadActorsByCriteria(nameFilter, minimumAge);
+        IEnumerable<Actor> actors;
+        
+        bool hasNameFilter = !string.IsNullOrWhiteSpace(nameFilter);
+        bool hasAgeFilter = minimumAge.HasValue;
+    
+        if (hasNameFilter && hasAgeFilter)
+        {
+            actors = repository.ReadActorsByName(nameFilter);
+            var maxDateOfBirth = DateTime.Today.AddYears(-minimumAge.Value);
+            actors = actors.Where(a => a.DateOfBirth <= maxDateOfBirth);
+        }
+        else if (hasNameFilter)
+        {
+            actors = repository.ReadActorsByName(nameFilter);
+        }
+        else if (hasAgeFilter)
+        {
+            var maxDateOfBirth = DateTime.Today.AddYears(-minimumAge.Value);
+            actors = repository.ReadActorsByMaxDateOfBirth(maxDateOfBirth);
+        }
+        else
+        {
+            actors = repository.ReadAllActors();
+        }
+    
+        return actors;
     }
 
     public void ChangeActors(IEnumerable<Actor> actors)

@@ -67,21 +67,14 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.Actors;
     }
 
-    public IEnumerable<Actor> ReadActorsByCriteria(string nameFilter, int? minimumAge)
+    public IEnumerable<Actor> ReadActorsByName(string nameFilter)
     {
-        var actors = ReadAllActors();
-    
-        if (!string.IsNullOrWhiteSpace(nameFilter))
-        {
-            actors = actors.Where(a => a.Name.ToUpper().Contains(nameFilter.ToUpper()));
-        }
-    
-        if (minimumAge.HasValue)
-        {
-            actors = actors.Where(a => a.Age >= minimumAge.Value);
-        }
-    
-        return actors;
+        return InMemoryStorage.Actors.Where(a => a.Name.Contains(nameFilter));       
+    }
+
+    public IEnumerable<Actor> ReadActorsByMaxDateOfBirth(DateTime maxDateOfBirth)
+    {
+        return InMemoryStorage.Actors.Where(a => a.DateOfBirth <= maxDateOfBirth);       
     }
 
     public void UpdateActors(IEnumerable<Actor> actors)

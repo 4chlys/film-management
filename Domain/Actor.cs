@@ -18,30 +18,14 @@ public class Actor : IValidatableObject
     [StringLength(50, MinimumLength = 2)]
     public string Nationality { get; set; } = string.Empty;
     
-    [DateRange(minYear:1800, mustBePast:true)]
-    private DateTime _dateOfBirth;
-    
-    public DateTime DateOfBirth 
-    { 
-        get => _dateOfBirth;
-        set
-        {
-            _dateOfBirth = value;
-            Age = CalculateAge(value);
-        }
-    }
+    [DateRange(minYear: 1800, mustBePast: true)]
+    public DateTime DateOfBirth { get; set; }
     
     [DateRange(minYear: 1800, mustBePast: true)]
     public DateTime? DateOfDeath { get; set; }
     
-    [Range(0, 150)]
-    private int _age;
-    
-    public int Age 
-    { 
-        get => RefreshAge();
-        private set => _age = value;
-    }
+    [NotMapped]
+    public int Age => CalculateAge(DateOfBirth, DateOfDeath);
 
     [NotMapped]
     public ICollection<Film> Films => _films;
@@ -62,25 +46,10 @@ public class Actor : IValidatableObject
 
     private static int CalculateAge(DateTime dateOfBirth, DateTime? dateOfDeath = null)
     {
-        var today = DateTime.Today;
-        if (dateOfDeath.HasValue && dateOfDeath.Value < today)
-        {
-            var age = today.Year - dateOfBirth.Year;
-            if (dateOfBirth.Date > today.AddYears(-age))
-                age--;
-            return age;       
-        }
-        else
-        {
-            var age = today.Year - dateOfBirth.Year;
-            if (dateOfBirth.Date > today.AddYears(-age))
-                age--;
-            return age;
-        }
-    }
-    
-    private int RefreshAge()
-    {
-        return CalculateAge(DateOfBirth);
+        var referenceDate = dateOfDeath ?? DateTime.Today;
+        var age = referenceDate.Year - dateOfBirth.Year;
+        if (dateOfBirth.Date > referenceDate.AddYears(-age))
+            age--;
+        return age;
     }
 }
