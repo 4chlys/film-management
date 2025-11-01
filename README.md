@@ -116,16 +116,16 @@ classDiagram
 ### Beide zoekcriteria ingevuld
 
 ```sql
-SELECT "a"."ImdbId", "a"."Age", "a"."DateOfBirth", "a"."Name", "a"."Nationality"
+SELECT "a"."ImdbId", "a"."DateOfBirth", "a"."DateOfDeath", "a"."Name", "a"."Nationality"
 FROM "Actors" AS "a"
-WHERE instr(upper("a"."Name"), @__ToUpper_0) > 0 AND "a"."Age" >= @__minimumAge_1
+WHERE instr(upper("a"."Name"), @__ToUpper_0) > 0
 -- Name = "Emma" AND MinimumAge = 20
 ```
 
 ### Enkel zoeken op naam
 
 ```sql
-SELECT "a"."ImdbId", "a"."Age", "a"."DateOfBirth", "a"."Name", "a"."Nationality"
+SELECT "a"."ImdbId", "a"."DateOfBirth", "a"."DateOfDeath", "a"."Name", "a"."Nationality"
 FROM "Actors" AS "a"
 WHERE instr(upper("a"."Name"), @__ToUpper_0) > 0
 -- Name = "Emma"
@@ -134,16 +134,16 @@ WHERE instr(upper("a"."Name"), @__ToUpper_0) > 0
 ### Enkel zoeken op minimum leeftijd
 
 ```sql
-SELECT "a"."ImdbId", "a"."Age", "a"."DateOfBirth", "a"."Name", "a"."Nationality"
+SELECT "a"."ImdbId", "a"."DateOfBirth", "a"."DateOfDeath", "a"."Name", "a"."Nationality"
 FROM "Actors" AS "a"
-WHERE "a"."Age" >= @__minimumAge_0
+WHERE "a"."DateOfBirth" <= @__maxDateOfBirth_0
 -- MinimumAge = 20
 ```
 
 ### Beide zoekcriteria leeg
 
 ```sql
-SELECT "a"."ImdbId", "a"."Age", "a"."DateOfBirth", "a"."Name", "a"."Nationality"
+SELECT "a"."ImdbId", "a"."DateOfBirth", "a"."DateOfDeath", "a"."Name", "a"."Nationality"
 FROM "Actors" AS "a"
 ```
 
