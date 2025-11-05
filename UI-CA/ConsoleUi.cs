@@ -101,31 +101,23 @@ public class ConsoleUi(IManager manager)
 
     private void ShowFilmsByGenre()
     {
-        Console.WriteLine("\nSelect genre:");
-        Console.WriteLine("==============");
-        
-        foreach (var name in EnumExtensions.GetAllDisplayNames<Genre>())
+        Genre selectedGenres = 0;
+        while (selectedGenres == 0)
         {
-            Console.WriteLine($"- {name}");
-        }
-
-        Genre? selectedGenre = null;
-        while (selectedGenre is null)
-        {
-            Console.Write("Enter genre name: ");
+            Console.Write($"\nGenre(s) - comma-separated ({EnumExtensions.GetEnumOptionsPrompt<Genre>()}): ");
             string genreInput = Console.ReadLine() ?? "";
 
-            selectedGenre = genreInput.ParseEnum<Genre>();
+            selectedGenres = genreInput.ParseEnumFlags<Genre>();
 
-            if (selectedGenre is null)
+            if (selectedGenres == 0)
             {
-                Console.WriteLine("Invalid genre. Please try again.\n");
+                Console.WriteLine("Invalid genre. Please try again.");
             }
         }
 
-        var filteredFilms = _manager.GetFilmsByGenre(selectedGenre.Value);
+        var filteredFilms = _manager.GetFilmsByGenre(selectedGenres);
 
-        Console.WriteLine($"\nFilms in {selectedGenre.Value.GetDisplayName()} genre:");
+        Console.WriteLine($"\nFilms with selected genre(s):");
         Console.WriteLine("===========================================");
 
         if (filteredFilms.Any())
@@ -137,7 +129,7 @@ public class ConsoleUi(IManager manager)
         }
         else
         {
-            Console.WriteLine("No films found in this genre.");
+            Console.WriteLine("No films found with these genres.");
         }
     }
 
@@ -193,22 +185,16 @@ public class ConsoleUi(IManager manager)
             {
                 Console.Write("Title: ");
                 string title = Console.ReadLine() ?? "";
-                
-                Console.WriteLine("\nAvailable genres:");
-                foreach (var name in EnumExtensions.GetAllDisplayNames<Genre>())
-                {
-                    Console.WriteLine($"- {name}");
-                }
 
-                Genre? genre = null;
-                while (genre is null)
+                Genre genres = 0;
+                while (genres == 0)
                 {
-                    Console.Write("Enter genre name: ");
+                    Console.Write($"Genre(s) - comma-separated ({EnumExtensions.GetEnumOptionsPrompt<Genre>()}): ");
                     string input = Console.ReadLine() ?? "";
-                    genre = input.ParseEnum<Genre>();
+                    genres = input.ParseEnumFlags<Genre>();
 
-                    if (genre is null)
-                        Console.WriteLine("Invalid genre. Please try again.\n");
+                    if (genres == 0)
+                        Console.WriteLine("Invalid genre(s). Please try again.");
                 }
                 
                 Console.Write("Release date (yyyy-MM-dd): ");
@@ -263,7 +249,7 @@ public class ConsoleUi(IManager manager)
                     }
                 }
                 
-                _manager.AddFilm(title, genre.Value, releaseDate, rating, director);
+                _manager.AddFilm(title, genres, releaseDate, rating, director);
                 Console.WriteLine("Film added successfully!");
                 success = true;
             }

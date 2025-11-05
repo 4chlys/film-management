@@ -2,15 +2,16 @@
 
 namespace FilmManagement.BL.Domain;
 
+[Flags]
 public enum Genre
 {
     Action = 1,
     Comedy = 2,
-    Drama = 3,
-    Horror = 4,
-    Romance = 5,
+    Drama = 4,
+    Horror = 8,
+    Romance = 16,
     [Display(Name = "Science Fiction")]
-    SciFi = 6,
-    Thriller = 7,
-    Documentary = 8
+    SciFi = 32,
+    Thriller = 64,
+    Documentary = 128
 }

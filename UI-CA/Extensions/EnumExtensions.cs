@@ -10,7 +10,15 @@ public static class EnumExtensions
         if (string.IsNullOrWhiteSpace(value))
             return null;
 
-        return Enum.TryParse<T>(value.Trim(), ignoreCase, out var result) ? result : null;
+        value = value.Trim();
+        
+        if (Enum.TryParse<T>(value, ignoreCase, out var result))
+            return result;
+        
+        if (int.TryParse(value, out int intValue) && Enum.IsDefined(typeof(T), intValue))
+            return (T)(object)intValue;
+        
+        return null;
     }
     
     public static string GetDisplayName(this Enum value)
@@ -27,5 +35,34 @@ public static class EnumExtensions
         return Enum.GetValues(typeof(T))
             .Cast<Enum>()
             .Select(e => e.GetDisplayName());
+    }
+    
+    public static string GetEnumOptionsPrompt<T>() where T : struct, Enum
+    {
+        var options = Enum.GetValues(typeof(T))
+            .Cast<Enum>()
+            .Select(e => $"{Convert.ToInt32(e)}={e.GetDisplayName()}");
+        
+        return string.Join(", ", options);
+    }
+    
+    public static T ParseEnumFlags<T>(this string value, bool ignoreCase = true) where T : struct, Enum
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return default(T);
+    
+        int result = 0;
+        var parts = value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+    
+        foreach (var part in parts)
+        {
+            var parsed = part.Trim().ParseEnum<T>(ignoreCase);
+            if (parsed.HasValue)
+            {
+                result |= Convert.ToInt32(parsed.Value);
+            }
+        }
+        
+        return (T)Enum.ToObject(typeof(T), result);
     }
 }

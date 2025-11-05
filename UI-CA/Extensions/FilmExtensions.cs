@@ -8,6 +8,19 @@ public static class FilmExtensions
     {
         var actorNames = string.Join(", ", film.Actors.Select(a => a.Name));
         var actorsText = string.IsNullOrEmpty(actorNames) ? "No actors listed" : $"Starring: {actorNames}";
-        return $"{film.Title} ({film.ReleaseDate.Year}) [{film.Genre}] - Rating: {film.Rating:F1} - Directed by {film.Director?.Name ?? "Unknown"} - {actorsText}";
+    
+        var genres = GetGenreNames(film.Genre);
+    
+        return $"{film.Title} ({film.ReleaseDate.Year}) [{genres}] - Rating: {film.Rating:F1} - Directed by {film.Director?.Name ?? "Unknown"} - {actorsText}";
+    }
+
+    private static string GetGenreNames(Genre genre)
+    {
+        var genreList = Enum.GetValues(typeof(Genre))
+            .Cast<Genre>()
+            .Where(g => g != 0 && genre.HasFlag(g))
+            .Select(g => g.GetDisplayName());
+    
+        return string.Join(", ", genreList);
     }
 }
