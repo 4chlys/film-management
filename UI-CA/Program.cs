@@ -4,17 +4,6 @@ using FilmManagement.DAL.EF;
 using FilmManagement.UI.CA;
 using Microsoft.EntityFrameworkCore;
 
-/*
-string solutionRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"../../../.."));
-string dbPath = Path.Combine(solutionRoot, "filmmanagement.db");
-
-string dbDirectory = Path.GetDirectoryName(dbPath);
-if (!Directory.Exists(dbDirectory))
-{
-    Directory.CreateDirectory(dbDirectory ?? string.Empty);
-}
-*/
-
 string dbPath= "filmmanagement.db";
 
 string connectionString = $"Data source={dbPath}";

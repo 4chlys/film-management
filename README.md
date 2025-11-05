@@ -6,8 +6,6 @@
 * Klasgroep: INF-202A
 * Onderwerp: Film, Actor, FilmDirector
 
-When running the application, make sure to either edit the Configurations for the Workspace Directory or uncomment the code in Program.cs and removing the current dbPath string.
-
 ## Sprint 1 
 
 ### UML Class Diagram
