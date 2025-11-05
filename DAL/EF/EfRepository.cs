@@ -25,11 +25,9 @@ public class EfRepository(FilmDbContext context) : IRepository
         return context.Films.ToList();   
     }
 
-    public IEnumerable<Film> ReadFilmsByGenre(Genre genre)
+    public IQueryable<Film> ReadAllFilmsQueryable()
     {
-        return context.Films
-            .Where(bg => bg.Genre == genre)
-            .ToList();
+        return context.Films;
     }
 
     public void UpdateFilms(IEnumerable<Film> films)
@@ -63,18 +61,9 @@ public class EfRepository(FilmDbContext context) : IRepository
         return context.Actors.ToList();
     }
 
-    public IEnumerable<Actor> ReadActorsByName(string nameFilter)
+    public IQueryable<Actor> ReadAllActorsQueryable()
     {
-        return context.Actors
-            .Where(a => a.Name.ToUpper().Contains(nameFilter.ToUpper()))
-            .ToList();
-    }
-
-    public IEnumerable<Actor> ReadActorsByMaxDateOfBirth(DateTime maxDateOfBirth)
-    {
-        return context.Actors
-            .Where(a => a.DateOfBirth <= maxDateOfBirth)
-            .ToList();
+        return context.Actors;
     }
 
     public void UpdateActors(IEnumerable<Actor> actors)
@@ -103,15 +92,14 @@ public class EfRepository(FilmDbContext context) : IRepository
         return context.Directors.Find(imdbId);
     }
 
-    public FilmDirector ReadDirectorByName(string name)
-    {
-        return context.Directors
-            .SingleOrDefault(d => d.Name.ToUpper() == name.ToUpper());
-    }
-
     public IEnumerable<FilmDirector> ReadAllDirectors()
     {
         return context.Directors.ToList();
+    }
+
+    public IQueryable<FilmDirector> ReadAllDirectorsQueryable()
+    {
+        return context.Directors;
     }
 
     public void UpdateDirectors(IEnumerable<FilmDirector> directors)

@@ -34,7 +34,8 @@ public class Manager(IRepository repository) : IManager
 
     public IEnumerable<Film> GetFilmsByGenre(Genre genre)
     {
-        return repository.ReadFilmsByGenre(genre);       
+        return repository.ReadAllFilmsQueryable().Where(f => (f.Genre & genre) != 0) 
+            .ToList();;       
     }
 
     public void ChangeFilms(IEnumerable<Film> films)
@@ -78,32 +79,20 @@ public class Manager(IRepository repository) : IManager
 
     public IEnumerable<Actor> GetActorsByCriteria(string nameFilter, int? minimumAge)
     {
-        IEnumerable<Actor> actors;
-        
-        bool hasNameFilter = !string.IsNullOrWhiteSpace(nameFilter);
-        bool hasAgeFilter = minimumAge.HasValue;
+        var query = repository.ReadAllActorsQueryable();
     
-        if (hasNameFilter && hasAgeFilter)
+        if (!string.IsNullOrWhiteSpace(nameFilter))
         {
-            actors = repository.ReadActorsByName(nameFilter);
-            var maxDateOfBirth = DateTime.Today.AddYears(-minimumAge.Value);
-            actors = actors.Where(a => a.DateOfBirth <= maxDateOfBirth);
-        }
-        else if (hasNameFilter)
-        {
-            actors = repository.ReadActorsByName(nameFilter);
-        }
-        else if (hasAgeFilter)
-        {
-            var maxDateOfBirth = DateTime.Today.AddYears(-minimumAge.Value);
-            actors = repository.ReadActorsByMaxDateOfBirth(maxDateOfBirth);
-        }
-        else
-        {
-            actors = repository.ReadAllActors();
+            query = query.Where(a => a.Name.ToUpper().Contains(nameFilter.ToUpper()));
         }
     
-        return actors;
+        if (minimumAge.HasValue)
+        {
+            var maxDateOfBirth = DateTime.Today.AddYears(-minimumAge.Value);
+            query = query.Where(a => a.DateOfBirth <= maxDateOfBirth);
+        }
+    
+        return query.ToList();
     }
 
     public void ChangeActors(IEnumerable<Actor> actors)
@@ -141,7 +130,7 @@ public class Manager(IRepository repository) : IManager
 
     public FilmDirector GetDirectorByName(string name)
     {
-        return repository.ReadDirectorByName(name);
+        return repository.ReadAllDirectorsQueryable().FirstOrDefault(d => d.Name == name);
     }
 
     public IEnumerable<FilmDirector> GetDirectors()

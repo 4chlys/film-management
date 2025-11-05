@@ -22,9 +22,9 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.Films;
     }
 
-    public IEnumerable<Film> ReadFilmsByGenre(Genre genre)
+    public IQueryable<Film> ReadAllFilmsQueryable()
     {
-        return InMemoryStorage.Films.Where(f => f.Genre == genre);       
+        return InMemoryStorage.Films.AsQueryable();
     }
 
     public void UpdateFilms(IEnumerable<Film> films)
@@ -67,14 +67,9 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.Actors;
     }
 
-    public IEnumerable<Actor> ReadActorsByName(string nameFilter)
+    public IQueryable<Actor> ReadAllActorsQueryable()
     {
-        return InMemoryStorage.Actors.Where(a => a.Name.Contains(nameFilter));       
-    }
-
-    public IEnumerable<Actor> ReadActorsByMaxDateOfBirth(DateTime maxDateOfBirth)
-    {
-        return InMemoryStorage.Actors.Where(a => a.DateOfBirth <= maxDateOfBirth);       
+        return InMemoryStorage.Actors.AsQueryable();
     }
 
     public void UpdateActors(IEnumerable<Actor> actors)
@@ -110,15 +105,14 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.FilmDirectors.SingleOrDefault(d => d.ImdbId == imdbId);       
     }
 
-    public FilmDirector ReadDirectorByName(string name)
-    {
-        return InMemoryStorage.FilmDirectors
-            .SingleOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-    }
-
     public IEnumerable<FilmDirector> ReadAllDirectors()
     {
         return InMemoryStorage.FilmDirectors;
+    }
+
+    public IQueryable<FilmDirector> ReadAllDirectorsQueryable()
+    {
+        return InMemoryStorage.FilmDirectors.AsQueryable();
     }
 
     public void UpdateDirectors(IEnumerable<FilmDirector> directors)

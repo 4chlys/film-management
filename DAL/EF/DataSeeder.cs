@@ -88,7 +88,7 @@ public static class DataSeeder
         var theLobster = new Film
         {
             Title = "The Lobster",
-            Genre = Genre.Drama,
+            Genre = Genre.Drama | Genre.Romance,
             ReleaseDate = new DateTime(2015, 10, 16),
             Rating = 7.2,
             Director = lanthimos
@@ -97,7 +97,7 @@ public static class DataSeeder
         var poorThings = new Film
         {
             Title = "Poor Things",
-            Genre = Genre.Comedy,
+            Genre = Genre.Comedy | Genre.Romance,
             ReleaseDate = new DateTime(2023, 12, 8),
             Rating = 7.9,
             Director = lanthimos
@@ -106,7 +106,7 @@ public static class DataSeeder
         var theShining = new Film
         {
             Title = "The Shining",
-            Genre = Genre.Horror,
+            Genre = Genre.Horror | Genre.Thriller,
             ReleaseDate = new DateTime(1980, 5, 23),
             Rating = 8.4,
             Director = kubrick
@@ -124,7 +124,7 @@ public static class DataSeeder
         var theLighthouse = new Film
         {
             Title = "The Lighthouse",
-            Genre = Genre.Horror,
+            Genre = Genre.Horror | Genre.Thriller,
             ReleaseDate = new DateTime(2019, 10, 18),
             Rating = 7.4,
             Director = eggers
@@ -133,7 +133,7 @@ public static class DataSeeder
         var theNorthman = new Film
         {
             Title = "The Northman",
-            Genre = Genre.Action,
+            Genre = Genre.Action | Genre.Romance | Genre.Drama,
             ReleaseDate = new DateTime(2022, 4, 22),
             Rating = 7.0,
             Director = eggers
