@@ -24,8 +24,7 @@ public class FilmDirector : IValidatableObject
     
     [DateRange(minYear: 1800, mustBePast: true)]
     public int? YearEnded { get; set; }
-
-    [NotMapped]
+    
     public ICollection<Film> Films => _films;
     
     public void AddFilm(Film film) => _films.Add(film);

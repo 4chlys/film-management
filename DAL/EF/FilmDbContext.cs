@@ -18,8 +18,7 @@ public class FilmDbContext(DbContextOptions options) : DbContext(options)
             optionsBuilder.UseSqlite("Data source=filmmanagement.db");
         }
 
-        optionsBuilder.LogTo(message => Debug.WriteLine(message),
-            LogLevel.Information);
+        optionsBuilder.LogTo(message => Debug.WriteLine(message), LogLevel.Information);
     }
 
     public bool CreateDatabase(bool dropDatabase)

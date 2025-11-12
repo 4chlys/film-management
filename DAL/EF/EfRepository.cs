@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using FilmManagement.BL.Domain;
 
 namespace FilmManagement.DAL.EF;
@@ -25,9 +26,9 @@ public class EfRepository(FilmDbContext context) : IRepository
         return context.Films.ToList();   
     }
 
-    public IQueryable<Film> ReadAllFilmsQueryable()
+    public IEnumerable<Film> ReadFilmsByCriteria(Expression<Func<Film, bool>> predicate)
     {
-        return context.Films;
+        return context.Films.Where(predicate).ToList();
     }
 
     public void UpdateFilms(IEnumerable<Film> films)
@@ -61,9 +62,9 @@ public class EfRepository(FilmDbContext context) : IRepository
         return context.Actors.ToList();
     }
 
-    public IQueryable<Actor> ReadAllActorsQueryable()
+    public IEnumerable<Actor> ReadActorsByCriteria(Expression<Func<Actor, bool>> predicate)
     {
-        return context.Actors;
+        return context.Actors.Where(predicate).ToList();
     }
 
     public void UpdateActors(IEnumerable<Actor> actors)
@@ -97,9 +98,9 @@ public class EfRepository(FilmDbContext context) : IRepository
         return context.Directors.ToList();
     }
 
-    public IQueryable<FilmDirector> ReadAllDirectorsQueryable()
+    public FilmDirector GetDirectorByName(string name)
     {
-        return context.Directors;
+        return context.Directors.FirstOrDefault(d => d.Name == name);
     }
 
     public void UpdateDirectors(IEnumerable<FilmDirector> directors)

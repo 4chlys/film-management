@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using FilmManagement.BL.Domain;
 using FilmManagement.BL.Domain.Validation;
 using FilmManagement.DAL;
@@ -34,8 +35,9 @@ public class Manager(IRepository repository) : IManager
 
     public IEnumerable<Film> GetFilmsByGenre(Genre genre)
     {
-        return repository.ReadAllFilmsQueryable().Where(f => (f.Genre & genre) != 0) 
-            .ToList();;       
+        Expression<Func<Film, bool>> predicate = f => (f.Genre & genre) != 0;
+        
+        return repository.ReadFilmsByCriteria(predicate);
     }
 
     public void ChangeFilms(IEnumerable<Film> films)
@@ -79,20 +81,23 @@ public class Manager(IRepository repository) : IManager
 
     public IEnumerable<Actor> GetActorsByCriteria(string nameFilter, int? minimumAge)
     {
-        var query = repository.ReadAllActorsQueryable();
-    
+        Expression<Func<Actor, bool>> predicate = actor => true;
+        
         if (!string.IsNullOrWhiteSpace(nameFilter))
         {
-            query = query.Where(a => a.Name.ToUpper().Contains(nameFilter.ToUpper()));
+            var upperFilter = nameFilter.ToUpper();
+            predicate = CombinePredicates(predicate, 
+                a => a.Name.ToUpper().Contains(upperFilter));
         }
-    
+        
         if (minimumAge.HasValue)
         {
             var maxDateOfBirth = DateTime.Today.AddYears(-minimumAge.Value);
-            query = query.Where(a => a.DateOfBirth <= maxDateOfBirth);
+            predicate = CombinePredicates(predicate, 
+                a => a.DateOfBirth <= maxDateOfBirth);
         }
-    
-        return query.ToList();
+        
+        return repository.ReadActorsByCriteria(predicate);
     }
 
     public void ChangeActors(IEnumerable<Actor> actors)
@@ -130,7 +135,7 @@ public class Manager(IRepository repository) : IManager
 
     public FilmDirector GetDirectorByName(string name)
     {
-        return repository.ReadAllDirectorsQueryable().FirstOrDefault(d => d.Name == name);
+        return repository.GetDirectorByName(name);
     }
 
     public IEnumerable<FilmDirector> GetDirectors()
@@ -155,5 +160,19 @@ public class Manager(IRepository repository) : IManager
     public IEnumerable<Genre> GetAllGenres()
     {
         return Enum.GetValues<Genre>();
+    }
+    
+    private Expression<Func<T, bool>> CombinePredicates<T>(
+        Expression<Func<T, bool>> first, 
+        Expression<Func<T, bool>> second)
+    {
+        var parameter = Expression.Parameter(typeof(T));
+        
+        var combined = Expression.AndAlso(
+            Expression.Invoke(first, parameter),
+            Expression.Invoke(second, parameter)
+        );
+        
+        return Expression.Lambda<Func<T, bool>>(combined, parameter);
     }
 }

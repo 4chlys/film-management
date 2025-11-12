@@ -25,10 +25,8 @@ public class Film
     [Range(0, 10)]
     public double Rating { get; set; }
     
-    [NotMapped]
     public FilmDirector Director { get; set; }
     
-    [NotMapped]
     public ICollection<Actor> Actors => _actors;
     
     public void AddActor(Actor actor) => _actors.Add(actor);

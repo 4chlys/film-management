@@ -37,7 +37,7 @@ public static class DataSeeder
             YearStarted = 2015
         };
 
-        context.Directors.AddRange([lanthimos, kubrick, lynch, eggers]);
+        context.Directors.AddRange(lanthimos, kubrick, lynch, eggers);
         
         // Create actors (part of many-to-many with films)
         var stone = new Actor
@@ -82,7 +82,7 @@ public static class DataSeeder
             DateOfBirth = new DateTime(1992, 10, 18),
         };
 
-        context.Actors.AddRange([stone, farrell, kidman, pattinson, dafoe, keir]);
+        context.Actors.AddRange(stone, farrell, kidman, pattinson, dafoe, keir);
 
         // Create films (part of many-to-many with actors)
         var theLobster = new Film
@@ -139,8 +139,8 @@ public static class DataSeeder
             Director = eggers
         };
 
-        context.Films.AddRange([theLobster, poorThings, theShining, mulhollandDrive, theLighthouse, theNorthman
-        ]);
+        context.Films.AddRange(theLobster, poorThings, theShining, mulhollandDrive, theLighthouse, theNorthman
+        );
 
         // Establish many-to-many relationships
         // The Lobster - Farrell

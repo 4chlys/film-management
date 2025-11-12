@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using FilmManagement.BL.Domain;
 using FilmManagement.DAL.EF;
 
@@ -22,9 +23,9 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.Films;
     }
 
-    public IQueryable<Film> ReadAllFilmsQueryable()
+    public IEnumerable<Film> ReadFilmsByCriteria(Expression<Func<Film, bool>> predicate)
     {
-        return InMemoryStorage.Films.AsQueryable();
+        return InMemoryStorage.Films.AsQueryable().Where(predicate).ToList();
     }
 
     public void UpdateFilms(IEnumerable<Film> films)
@@ -67,9 +68,9 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.Actors;
     }
 
-    public IQueryable<Actor> ReadAllActorsQueryable()
+    public IEnumerable<Actor> ReadActorsByCriteria(Expression<Func<Actor, bool>> predicate)
     {
-        return InMemoryStorage.Actors.AsQueryable();
+        return InMemoryStorage.Actors.AsQueryable().Where(predicate).ToList();
     }
 
     public void UpdateActors(IEnumerable<Actor> actors)
@@ -110,9 +111,9 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.FilmDirectors;
     }
 
-    public IQueryable<FilmDirector> ReadAllDirectorsQueryable()
+    public FilmDirector GetDirectorByName(string name)
     {
-        return InMemoryStorage.FilmDirectors.AsQueryable();
+        return InMemoryStorage.FilmDirectors.FirstOrDefault(d => d.Name == name);
     }
 
     public void UpdateDirectors(IEnumerable<FilmDirector> directors)

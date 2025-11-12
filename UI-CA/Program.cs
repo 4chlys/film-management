@@ -4,11 +4,11 @@ using FilmManagement.DAL.EF;
 using FilmManagement.UI.CA;
 using Microsoft.EntityFrameworkCore;
 
-string dbPath= "filmmanagement.db";
+string dbPath = "filmmanagement.db";
 
 string connectionString = $"Data source={dbPath}";
 
-DbContextOptionsBuilder optionsBuilder = new DbContextOptionsBuilder();
+DbContextOptionsBuilder optionsBuilder = new DbContextOptionsBuilder<FilmDbContext>();
 optionsBuilder.UseSqlite(connectionString);
 FilmDbContext context = new FilmDbContext(optionsBuilder.Options);
 

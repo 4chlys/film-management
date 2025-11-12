@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using FilmManagement.BL.Domain;
 
 namespace FilmManagement.DAL;
@@ -7,21 +8,21 @@ public interface IRepository
     void CreateFilm(Film film);
     Film ReadFilm(Guid imdbId);
     IEnumerable<Film> ReadAllFilms();
-    IQueryable<Film> ReadAllFilmsQueryable();
+    IEnumerable<Film> ReadFilmsByCriteria(Expression<Func<Film, bool>> predicate);
     void UpdateFilms(IEnumerable<Film> films);
     void DeleteFilm(Film film);
     
     void CreateActor(Actor actor);
     Actor ReadActor(Guid imdbId);  
     IEnumerable<Actor> ReadAllActors();
-    IQueryable<Actor> ReadAllActorsQueryable();
+    IEnumerable<Actor> ReadActorsByCriteria(Expression<Func<Actor, bool>> predicate);
     void UpdateActors(IEnumerable<Actor> actors);
     void DeleteActor(Actor actor);
     
     void CreateDirector(FilmDirector director); 
     FilmDirector ReadDirector(Guid imdbId);
+    FilmDirector GetDirectorByName(string name);
     IEnumerable<FilmDirector> ReadAllDirectors();
-    IQueryable<FilmDirector> ReadAllDirectorsQueryable();
     void UpdateDirectors(IEnumerable<FilmDirector> directors);
     void DeleteDirector(FilmDirector director);
 }
