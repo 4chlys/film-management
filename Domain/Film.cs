@@ -6,7 +6,7 @@ namespace FilmManagement.BL.Domain;
 
 public class Film
 {
-    private readonly ICollection<Actor> _actors = [];
+    private readonly ICollection<ActorFilm> _actorFilms = [];
     
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -27,7 +27,15 @@ public class Film
     
     public FilmDirector Director { get; set; }
     
-    public ICollection<Actor> Actors => _actors;
+    public ICollection<ActorFilm> ActorFilms => _actorFilms;
     
-    public void AddActor(Actor actor) => _actors.Add(actor);
+    public void AddActor(Actor actor)
+    {
+        var actorFilm = new ActorFilm
+        {
+            Actor = actor,
+            Film = this
+        };
+        _actorFilms.Add(actorFilm);
+    }
 }

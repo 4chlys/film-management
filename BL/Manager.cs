@@ -23,14 +23,30 @@ public class Manager(IRepository repository) : IManager
         return filmToCreate;
     }
 
+    public void AddActorToFilm(Guid filmId, Guid actorId, int? screenTime)
+    {
+        var actorFilm = new ActorFilm()
+        {
+            Actor = repository.ReadActor(actorId),
+            Film = repository.ReadFilm(filmId),
+            ScreenTime = screenTime
+        };
+        repository.CreateActorFilm(actorFilm);
+    }
+
     public Film GetFilm(Guid imdbId)
     {
         return repository.ReadFilm(imdbId);       
     }
 
-    public IEnumerable<Film> GetFilms()
+    public IEnumerable<Film> GetAllFilms()
     {
-        return repository.ReadAllFilms();
+        return repository.ReadAllFilmsWithActorsAndDirectors();
+    }
+
+    public IEnumerable<Film> GetAllFilmsWithActorsAndDirectors()
+    {
+        return repository.ReadAllFilmsWithActorsAndDirectors();
     }
 
     public IEnumerable<Film> GetFilmsByGenre(Genre genre)
@@ -54,6 +70,16 @@ public class Manager(IRepository repository) : IManager
         repository.DeleteFilm(film);
     }
 
+    public void RemoveActorOfFilm(Guid filmId, Guid actorId)
+    {
+        var actorFilm = new ActorFilm()
+        {
+            Actor = repository.ReadActor(actorId),
+            Film = repository.ReadFilm(filmId)
+        };
+        repository.DeleteActorFilm(actorFilm);
+    }
+
     public Actor AddActor(string name, string nationality, DateTime dateOfBirth, DateTime? dateOfDeath)
     {
         var actorToCreate = new Actor
@@ -74,9 +100,14 @@ public class Manager(IRepository repository) : IManager
         return repository.ReadActor(imdbId);       
     }
 
-    public IEnumerable<Actor> GetActors()
+    public IEnumerable<Actor> GetAllActors()
     {
-        return repository.ReadAllActors();
+        return repository.ReadAllActorsWithFilms();
+    }
+
+    public IEnumerable<Actor> GetAllActorsWithFilms()
+    {
+        return repository.ReadAllActorsWithFilms();
     }
 
     public IEnumerable<Actor> GetActorsByCriteria(string nameFilter, int? minimumAge)
@@ -120,7 +151,8 @@ public class Manager(IRepository repository) : IManager
         {
             Name = name,
             Country = country,
-            YearStarted = yearStarted       
+            CareerStart = yearStarted,
+            CareerEnd = yearEnded
         };
         
         EntityValidator.ValidateEntity(filmDirectorToCreate);
@@ -135,12 +167,17 @@ public class Manager(IRepository repository) : IManager
 
     public FilmDirector GetDirectorByName(string name)
     {
-        return repository.GetDirectorByName(name);
+        return repository.ReadDirectorByName(name);
     }
 
-    public IEnumerable<FilmDirector> GetDirectors()
+    public IEnumerable<FilmDirector> GetAllDirectors()
     {
-        return repository.ReadAllDirectors();
+        return repository.ReadAllDirectorsWithFilms();
+    }
+
+    public IEnumerable<FilmDirector> GetAllDirectorsWithFilms()
+    {
+        return repository.ReadAllDirectorsWithFilms();
     }
     
     public void ChangeDirectors(IEnumerable<FilmDirector> directors)

@@ -21,6 +21,42 @@ public class FilmDbContext(DbContextOptions options) : DbContext(options)
         optionsBuilder.LogTo(message => Debug.WriteLine(message), LogLevel.Information);
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Film>()
+            .Property<Guid?>("DirectorFK_Shadow");
+        modelBuilder.Entity<ActorFilm>()
+            .Property<Guid?>("ActorFK_Shadow");
+        modelBuilder.Entity<ActorFilm>()
+            .Property<Guid?>("FilmFK_Shadow");
+        
+        modelBuilder.Entity<ActorFilm>()
+            .HasKey("ActorFK_Shadow", "FilmFK_Shadow");
+        
+        modelBuilder.Entity<Film>()
+            .HasOne(film => film.Director)
+            .WithMany(director => director.Films)
+            .HasForeignKey("DirectorFK_Shadow")
+            .IsRequired()
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        modelBuilder.Entity<ActorFilm>()
+            .HasOne(af => af.Actor)
+            .WithMany(actor => actor.ActorFilms)
+            .HasForeignKey("ActorFK_Shadow")
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<ActorFilm>()
+            .HasOne(af => af.Film)
+            .WithMany(film => film.ActorFilms)
+            .HasForeignKey("FilmFK_Shadow")
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        base.OnModelCreating(modelBuilder);
+    }
+
     public bool CreateDatabase(bool dropDatabase)
     {
         if (dropDatabase)

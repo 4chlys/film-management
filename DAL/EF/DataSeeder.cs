@@ -6,40 +6,49 @@ public static class DataSeeder
 {
     public static void Seed(FilmDbContext context)
     {
-        // Create directors (not part of many-to-many, just needed for films)
+        // === DIRECTORS ===
         var lanthimos = new FilmDirector 
         { 
             Name = "Yorgos Lanthimos", 
             Country = "Greece", 
-            YearStarted = 2001
+            CareerStart = 2001
         };
         
         var kubrick = new FilmDirector 
         { 
             Name = "Stanley Kubrick", 
             Country = "USA", 
-            YearStarted = 1951,
-            YearEnded = 1999
+            CareerStart = 1951,
+            CareerEnd = 1999
         };
         
         var lynch = new FilmDirector 
         { 
             Name = "David Lynch", 
             Country = "USA", 
-            YearStarted = 1970,
-            YearEnded = 2006
+            CareerStart = 1970,
+            CareerEnd = 2006
         };
         
         var eggers = new FilmDirector 
         { 
             Name = "Robert Eggers", 
             Country = "USA", 
-            YearStarted = 2015
+            CareerStart = 2015
         };
 
-        context.Directors.AddRange(lanthimos, kubrick, lynch, eggers);
+        var godard = new FilmDirector
+        {
+            Name = "Jean-Luc Godard",
+            Country = "France",
+            CareerStart = 1950,
+            CareerEnd = 2018
+        };
+
+        context.Directors.AddRange(lanthimos, kubrick, lynch, eggers, godard);
         
-        // Create actors (part of many-to-many with films)
+
+        // === ACTORS ===
         var stone = new Actor
         {
             Name = "Emma Stone",
@@ -81,10 +90,25 @@ public static class DataSeeder
             Nationality = "Irish",
             DateOfBirth = new DateTime(1992, 10, 18),
         };
+        
+        var belmondo = new Actor
+        {
+            Name = "Jean-Paul Belmondo",
+            Nationality = "French",
+            DateOfBirth = new DateTime(1933, 4, 9)
+        };
 
-        context.Actors.AddRange(stone, farrell, kidman, pattinson, dafoe, keir);
+        var karina = new Actor
+        {
+            Name = "Anna Karina",
+            Nationality = "Danish-French",
+            DateOfBirth = new DateTime(1940, 9, 22)
+        };
 
-        // Create films (part of many-to-many with actors)
+        context.Actors.AddRange(stone, farrell, kidman, pattinson, dafoe, keir, belmondo, karina);
+
+
+        // === FILMS ===
         var theLobster = new Film
         {
             Title = "The Lobster",
@@ -138,40 +162,57 @@ public static class DataSeeder
             Rating = 7.0,
             Director = eggers
         };
+        
+        var breathless = new Film
+        {
+            Title = "À bout de souffle (Breathless)",
+            Genre = Genre.Drama | Genre.Romance,
+            ReleaseDate = new DateTime(1960, 3, 16),
+            Rating = 7.8,
+            Director = godard
+        };
 
-        context.Films.AddRange(theLobster, poorThings, theShining, mulhollandDrive, theLighthouse, theNorthman
+        var vivreSaVie = new Film
+        {
+            Title = "Vivre sa vie",
+            Genre = Genre.Drama,
+            ReleaseDate = new DateTime(1962, 9, 20),
+            Rating = 8.0,
+            Director = godard
+        };
+
+        context.Films.AddRange(
+            theLobster, poorThings, theShining, mulhollandDrive,
+            theLighthouse, theNorthman, breathless, vivreSaVie
         );
 
-        // Establish many-to-many relationships
-        // The Lobster - Farrell
+
+        // === RELATIONSHIPS ===
+        // Many to many relationships
         theLobster.AddActor(farrell);
-        farrell.AddFilm(theLobster);
-        
-        // Poor Things - Stone, Dafoe
+
         poorThings.AddActor(stone);
         poorThings.AddActor(dafoe);
-        stone.AddFilm(poorThings);
-        dafoe.AddFilm(poorThings);
-        
-        // The Lighthouse - Pattinson, Dafoe
+
         theLighthouse.AddActor(pattinson);
         theLighthouse.AddActor(dafoe);
-        pattinson.AddFilm(theLighthouse);
-        dafoe.AddFilm(theLighthouse);
-        
-        // The Northman - Kidman, Dafoe
+
         theNorthman.AddActor(kidman);
         theNorthman.AddActor(dafoe);
-        kidman.AddFilm(theNorthman);
-        dafoe.AddFilm(theNorthman);
-        
-        // Add director relationships
+
+        breathless.AddActor(belmondo);
+
+        vivreSaVie.AddActor(karina);
+
+        // One to many relationship
         lanthimos.AddFilm(theLobster);
         lanthimos.AddFilm(poorThings);
         kubrick.AddFilm(theShining);
         lynch.AddFilm(mulhollandDrive);
         eggers.AddFilm(theLighthouse);
         eggers.AddFilm(theNorthman);
+        godard.AddFilm(breathless);
+        godard.AddFilm(vivreSaVie);
         
         context.SaveChanges();
         context.ChangeTracker.Clear();

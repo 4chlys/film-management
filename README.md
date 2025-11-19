@@ -147,4 +147,79 @@ SELECT "a"."ImdbId", "a"."DateOfBirth", "a"."DateOfDeath", "a"."Name", "a"."Nati
 FROM "Actors" AS "a"
 ```
 
+## Sprint 4
+
+```mermaid
+classDiagram
+    class Actor {
+        -ICollection~ActorFilm~ _actorFilms
+        +Guid ImdbId
+        +string Name
+        +string Nationality
+        +DateTime DateOfBirth
+        +DateTime? DateOfDeath
+        +int Age
+        +ICollection~ActorFilm~ ActorFilms
+        +AddFilm(Film) void
+        +Validate(ValidationContext) IEnumerable~ValidationResult~
+        -CalculateAge(DateTime, DateTime?) int
+    }
+
+    class Film {
+        -ICollection~ActorFilm~ _actorFilms
+        +Guid ImdbId
+        +string Title
+        +Genre Genre
+        +DateTime ReleaseDate
+        +double Rating
+        +FilmDirector Director
+        +ICollection~ActorFilm~ ActorFilms
+        +AddActor(Actor) void
+    }
+
+    class ActorFilm {
+        +Actor Actor
+        +Film Film
+        +int ScreenTime
+    }
+
+    class FilmDirector {
+        -ICollection~Film~ _films
+        +Guid ImdbId
+        +string Name
+        +string Country
+        +int? CareerStart
+        +int? CareerEnd
+        +ICollection~Film~ Films
+        +AddFilm(Film) void
+        +Validate(ValidationContext) IEnumerable~ValidationResult~
+    }
+
+    class Genre {
+        <<enumeration>>
+        None
+        Action
+        Comedy
+        Drama
+        Horror
+        Romance
+        SciFi
+        Thriller
+        Documentary
+        Western
+        Musical
+        Animation
+        Fantasy
+        Short
+    }
+
+    Actor "1" -- "0..*" ActorFilm : has
+    Film "1" -- "0..*" ActorFilm : has
+    ActorFilm --> Actor : references
+    ActorFilm --> Film : references
+    Film "0..*" --> "1" FilmDirector : directed by
+    FilmDirector "1" -- "0..*" Film : directs
+    Film --> Genre : has
+```
+
 ---

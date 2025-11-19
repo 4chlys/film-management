@@ -6,10 +6,10 @@ public static class FilmDirectorExtensions
 {
     public static string GetInfo(this FilmDirector director)
     {
-        if (director.YearStarted.HasValue)
+        if (director.CareerStart.HasValue)
         {
-            var yearsActive = DateTime.Now.Year - director.YearStarted.Value;
-            return $"{director.Name} from {director.Country}, directing since {director.YearStarted} ({yearsActive} years)";
+            var yearsActive = DateTime.Now.Year - director.CareerStart.Value;
+            return $"{director.Name} from {director.Country}, directing since {director.CareerStart} ({yearsActive} years)";
         }
         return $"{director.Name} from {director.Country}";
     }

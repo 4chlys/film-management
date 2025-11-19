@@ -20,10 +20,10 @@ public class FilmDirector : IValidatableObject
     public string Country { get; set; } = string.Empty;
     
     [DateRange(minYear: 1800, mustBePast: true)]
-    public int? YearStarted { get; set; } 
+    public int? CareerStart { get; set; } 
     
     [DateRange(minYear: 1800, mustBePast: true)]
-    public int? YearEnded { get; set; }
+    public int? CareerEnd { get; set; }
     
     public ICollection<Film> Films => _films;
     
@@ -33,13 +33,13 @@ public class FilmDirector : IValidatableObject
     {
         var errors = new List<ValidationResult>();
 
-        if (YearStarted.HasValue && YearEnded.HasValue)
+        if (CareerStart.HasValue && CareerEnd.HasValue)
         {
-            if (YearStarted.Value > YearEnded.Value)
+            if (CareerStart.Value > CareerEnd.Value)
             {
                 errors.Add(new ValidationResult(
                     "Year started cannot be after year ended!",
-                    [nameof(YearStarted), nameof(YearEnded)]));
+                    [nameof(CareerStart), nameof(CareerEnd)]));
             }
         }
         return errors;

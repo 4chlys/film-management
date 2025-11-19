@@ -6,7 +6,7 @@ namespace FilmManagement.BL.Domain;
 
 public class Actor : IValidatableObject
 {
-    private readonly ICollection<Film> _films = [];
+    private readonly ICollection<ActorFilm> _actorFilms = [];
 
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -28,9 +28,17 @@ public class Actor : IValidatableObject
     [NotMapped]
     public int Age => CalculateAge(DateOfBirth, DateOfDeath);
     
-    public ICollection<Film> Films => _films;
+    public ICollection<ActorFilm> ActorFilms => _actorFilms;
     
-    public void AddFilm(Film film) => _films.Add(film);
+    public void AddFilm(Film film)
+    {
+        var actorFilm = new ActorFilm
+        {
+            Actor = this,
+            Film = film
+        };
+        _actorFilms.Add(actorFilm);
+    }
 
     IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
     {

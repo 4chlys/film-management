@@ -13,6 +13,11 @@ public class InMemoryRepository : IRepository
         InMemoryStorage.Films.Add(film);
     }
 
+    public void CreateActorFilm(ActorFilm actorFilm)
+    {
+        throw new NotImplementedException();
+    }
+
     public Film ReadFilm(Guid imdbId)
     {
         return InMemoryStorage.Films.SingleOrDefault(f => f.ImdbId == imdbId);       
@@ -23,9 +28,19 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.Films;
     }
 
+    public IEnumerable<Film> ReadAllFilmsWithActorsAndDirectors()
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<Film> ReadFilmsByCriteria(Expression<Func<Film, bool>> predicate)
     {
         return InMemoryStorage.Films.AsQueryable().Where(predicate).ToList();
+    }
+
+    public IEnumerable<Actor> ReadActorsOfFilm(Guid imdbId)
+    {
+        throw new NotImplementedException();
     }
 
     public void UpdateFilms(IEnumerable<Film> films)
@@ -50,7 +65,12 @@ public class InMemoryRepository : IRepository
     {
         InMemoryStorage.Films.Remove(film);
     }
-    
+
+    public void DeleteActorFilm(ActorFilm actorFilm)
+    {
+        throw new NotImplementedException();
+    }
+
     //Actor operations  
     public void CreateActor(Actor actor)
     {
@@ -62,10 +82,15 @@ public class InMemoryRepository : IRepository
     {
         return InMemoryStorage.Actors.SingleOrDefault(a => a.ImdbId == imdbId);       
     }
-
+    
     public IEnumerable<Actor> ReadAllActors()
     {
         return InMemoryStorage.Actors;
+    }
+
+    public IEnumerable<Actor> ReadAllActorsWithFilms()
+    {
+        throw new NotImplementedException();
     }
 
     public IEnumerable<Actor> ReadActorsByCriteria(Expression<Func<Actor, bool>> predicate)
@@ -105,13 +130,18 @@ public class InMemoryRepository : IRepository
     {
         return InMemoryStorage.FilmDirectors.SingleOrDefault(d => d.ImdbId == imdbId);       
     }
-
+    
     public IEnumerable<FilmDirector> ReadAllDirectors()
     {
         return InMemoryStorage.FilmDirectors;
     }
 
-    public FilmDirector GetDirectorByName(string name)
+    public IEnumerable<FilmDirector> ReadAllDirectorsWithFilms()
+    {
+        throw new NotImplementedException();
+    }
+
+    public FilmDirector ReadDirectorByName(string name)
     {
         return InMemoryStorage.FilmDirectors.FirstOrDefault(d => d.Name == name);
     }
@@ -128,7 +158,7 @@ public class InMemoryRepository : IRepository
             }
             existing.Name = director.Name;
             existing.Country = director.Country;
-            existing.YearStarted = director.YearStarted;
+            existing.CareerStart = director.CareerStart;
         }
     }
     
