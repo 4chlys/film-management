@@ -5,21 +5,14 @@ using FilmManagement.UI.CA.Utilities;
 
 namespace FilmManagement.UI.CA.Handlers;
 
-public class ActorMenuHandler
+public class ActorMenuHandler(IManager manager)
 {
-    private readonly IManager _manager;
-
-    public ActorMenuHandler(IManager manager)
-    {
-        _manager = manager;
-    }
-
     public void ShowAllActors()
     {
         Console.WriteLine("\nAll actors");
         Console.WriteLine("==========");
         
-        var actors = _manager.GetAllActorsWithFilms();
+        var actors = manager.GetAllActorsWithFilms();
         
         if (!actors.Any())
         {
@@ -40,7 +33,7 @@ public class ActorMenuHandler
         
         int? ageFilter = InputParser.ParseOptionalInt(ageInput, "minimum age");
 
-        var filteredActors = _manager.GetActorsByCriteria(nameFilter, ageFilter);
+        var filteredActors = manager.GetActorsByCriteria(nameFilter, ageFilter);
 
         Console.WriteLine($"\nFiltered actors:");
         Console.WriteLine("================");
@@ -87,7 +80,7 @@ public class ActorMenuHandler
                     continue;
                 }
 
-                _manager.AddActor(name, nationality, dateOfBirth, dateOfDeath);
+                manager.AddActor(name, nationality, dateOfBirth, dateOfDeath);
                 ValidationHelper.ShowSuccessMessage("Actor added successfully!");
                 success = true;
             }
@@ -107,7 +100,7 @@ public class ActorMenuHandler
         bool success = false;
         while (!success)
         {
-            var films = _manager.GetAllFilmsWithActorsAndDirectors().ToList();
+            var films = manager.GetAllFilmsWithActorsAndDirectors().ToList();
             
             if (!films.Any())
             {
@@ -126,7 +119,7 @@ public class ActorMenuHandler
                 continue;
             }
 
-            var filmToAdd = _manager.GetFilm(filmId);
+            var filmToAdd = manager.GetFilm(filmId);
             if (filmToAdd == null)
             {
                 ValidationHelper.ShowErrorMessage("Film not found.");
@@ -136,7 +129,7 @@ public class ActorMenuHandler
             Console.WriteLine($"\nWhich actor would you like to add to '{filmToAdd.Title}'?");
             Console.WriteLine("==============================================");
             
-            var actors = _manager.GetAllActorsWithFilms().ToList();
+            var actors = manager.GetAllActorsWithFilms().ToList();
             
             if (!actors.Any())
             {
@@ -165,7 +158,7 @@ public class ActorMenuHandler
 
             try
             {
-                _manager.AddActorToFilm(filmId, actorId, screenTime);
+                manager.AddActorToFilm(filmId, actorId, screenTime);
                 ValidationHelper.ShowSuccessMessage("Actor added to film successfully!");
                 success = true;
             }
@@ -184,7 +177,7 @@ public class ActorMenuHandler
         bool success = false;
         while (!success)
         {
-            var films = _manager.GetAllFilmsWithActorsAndDirectors().ToList();
+            var films = manager.GetAllFilmsWithActorsAndDirectors().ToList();
             
             if (!films.Any())
             {
@@ -203,7 +196,7 @@ public class ActorMenuHandler
                 continue;
             }
 
-            var filmToRemove = _manager.GetFilm(filmId);
+            var filmToRemove = manager.GetFilm(filmId);
             if (filmToRemove == null)
             {
                 ValidationHelper.ShowErrorMessage("Film not found.");
@@ -234,7 +227,7 @@ public class ActorMenuHandler
 
             try
             {
-                _manager.RemoveActorOfFilm(filmId, actorId);
+                manager.RemoveActorFromFilm(filmId, actorId);
                 ValidationHelper.ShowSuccessMessage("Actor removed from film successfully!");
                 success = true;
             }

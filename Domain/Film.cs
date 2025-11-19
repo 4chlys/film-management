@@ -6,10 +6,7 @@ namespace FilmManagement.BL.Domain;
 
 public class Film
 {
-    private readonly ICollection<ActorFilm> _actorFilms = [];
-    
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid ImdbId { get; set; }
     
     [Required]
@@ -26,16 +23,6 @@ public class Film
     public double Rating { get; set; }
     
     public FilmDirector Director { get; set; }
-    
-    public ICollection<ActorFilm> ActorFilms => _actorFilms;
-    
-    public void AddActor(Actor actor)
-    {
-        var actorFilm = new ActorFilm
-        {
-            Actor = actor,
-            Film = this
-        };
-        _actorFilms.Add(actorFilm);
-    }
+
+    public ICollection<ActorFilm> ActorFilms { get; init; } = [];
 }

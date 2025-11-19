@@ -14,7 +14,7 @@ public interface IManager
     IEnumerable<Film> GetFilmsByGenre(Genre genre); 
     void ChangeFilms(IEnumerable<Film> films);
     void RemoveFilm(Film film);
-    void RemoveActorOfFilm(Guid filmId, Guid actorId);
+    void RemoveActorFromFilm(Guid filmId, Guid actorId);
     
     Actor AddActor(string name, string nationality, DateTime dateOfBirth, DateTime? dateOfDeath);
     Actor GetActor(Guid imdbId);  

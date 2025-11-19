@@ -6,8 +6,6 @@ namespace FilmManagement.BL.Domain;
 
 public class FilmDirector : IValidatableObject
 {
-    private readonly ICollection<Film> _films = [];
-
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid ImdbId { get; set; }
@@ -24,10 +22,8 @@ public class FilmDirector : IValidatableObject
     
     [DateRange(minYear: 1800, mustBePast: true)]
     public int? CareerEnd { get; set; }
-    
-    public ICollection<Film> Films => _films;
-    
-    public void AddFilm(Film film) => _films.Add(film);
+
+    public ICollection<Film> Films { get; init; } = [];
 
     IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
     {

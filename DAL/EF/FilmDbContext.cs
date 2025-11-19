@@ -37,7 +37,7 @@ public class FilmDbContext(DbContextOptions options) : DbContext(options)
             .HasOne(film => film.Director)
             .WithMany(director => director.Films)
             .HasForeignKey("DirectorFK_Shadow")
-            .IsRequired()
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.SetNull);
         
         modelBuilder.Entity<ActorFilm>()

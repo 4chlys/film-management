@@ -8,7 +8,7 @@ public static class ValidationHelper
         Console.WriteLine("\nValidation errors:");
         foreach (var error in errors)
         {
-            Console.WriteLine($" - {error.Trim()}");
+            Console.WriteLine($"\t- {error.Trim()}");
         }
     }
 

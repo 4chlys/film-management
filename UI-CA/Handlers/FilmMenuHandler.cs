@@ -107,7 +107,7 @@ public class FilmMenuHandler(IManager manager)
         }
     }
 
-    private FilmDirector? GetOrCreateDirector()
+    private FilmDirector GetOrCreateDirector()
     {
         string directorName = InputParser.PromptForInput("Director name: ");
         var director = manager.GetDirectorByName(directorName);

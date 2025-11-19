@@ -106,7 +106,7 @@ public static class DataSeeder
         };
 
         context.Actors.AddRange(stone, farrell, kidman, pattinson, dafoe, keir, belmondo, karina);
-
+        
 
         // === FILMS ===
         var theLobster = new Film
@@ -189,30 +189,20 @@ public static class DataSeeder
 
         // === RELATIONSHIPS ===
         // Many to many relationships
-        theLobster.AddActor(farrell);
+        theLobster.ActorFilms.Add(new ActorFilm { Actor = farrell, Film = theLobster });
 
-        poorThings.AddActor(stone);
-        poorThings.AddActor(dafoe);
+        poorThings.ActorFilms.Add(new ActorFilm { Actor = stone, Film = poorThings });
+        poorThings.ActorFilms.Add(new ActorFilm { Actor = dafoe, Film = poorThings });
 
-        theLighthouse.AddActor(pattinson);
-        theLighthouse.AddActor(dafoe);
+        theLighthouse.ActorFilms.Add(new ActorFilm { Actor = pattinson, Film = theLighthouse });
+        theLighthouse.ActorFilms.Add(new ActorFilm { Actor = dafoe, Film = theLighthouse });
 
-        theNorthman.AddActor(kidman);
-        theNorthman.AddActor(dafoe);
+        theNorthman.ActorFilms.Add(new ActorFilm { Actor = kidman, Film = theNorthman });
+        theNorthman.ActorFilms.Add(new ActorFilm { Actor = dafoe, Film = theNorthman });
 
-        breathless.AddActor(belmondo);
+        breathless.ActorFilms.Add(new ActorFilm { Actor = belmondo, Film = breathless });
 
-        vivreSaVie.AddActor(karina);
-
-        // One to many relationship
-        lanthimos.AddFilm(theLobster);
-        lanthimos.AddFilm(poorThings);
-        kubrick.AddFilm(theShining);
-        lynch.AddFilm(mulhollandDrive);
-        eggers.AddFilm(theLighthouse);
-        eggers.AddFilm(theNorthman);
-        godard.AddFilm(breathless);
-        godard.AddFilm(vivreSaVie);
+        vivreSaVie.ActorFilms.Add(new ActorFilm { Actor = karina, Film = vivreSaVie });
         
         context.SaveChanges();
         context.ChangeTracker.Clear();

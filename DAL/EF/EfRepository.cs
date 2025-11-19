@@ -15,10 +15,14 @@ public class EfRepository(FilmDbContext context) : IRepository
     public void CreateActorFilm(ActorFilm actorFilm)
     {
         var film = context.Films.Find(actorFilm.Film.ImdbId);
+        
         if (film == null)
-        {
-            throw new Exception("Film not found");
-        }
+            throw new InvalidOperationException("Film not found");
+        
+        if (film.ActorFilms.Any(af => af.Actor.ImdbId == actorFilm.Actor.ImdbId))
+            throw new InvalidOperationException(
+                "This actor is already associated with this film.");
+        
         film.ActorFilms.Add(actorFilm);
         context.SaveChanges();
     }
@@ -28,7 +32,7 @@ public class EfRepository(FilmDbContext context) : IRepository
         return context.Films
             .Include(f => f.Director)
             .Include(f => f.ActorFilms)
-                .ThenInclude(af => af.Actor)
+            .ThenInclude(af => af.Actor)
             .SingleOrDefault(f => f.ImdbId == imdbId);
     }
 
@@ -42,7 +46,7 @@ public class EfRepository(FilmDbContext context) : IRepository
         return context.Films
             .Include(f => f.Director)
             .Include(f => f.ActorFilms)
-                .ThenInclude(af => af.Actor)
+            .ThenInclude(af => af.Actor)
             .ToList();   
     }
 
@@ -51,7 +55,7 @@ public class EfRepository(FilmDbContext context) : IRepository
         return context.Films
             .Include(f => f.Director)
             .Include(f => f.ActorFilms)
-                .ThenInclude(af => af.Actor)
+            .ThenInclude(af => af.Actor)
             .Where(predicate)
             .ToList();
     }
@@ -60,7 +64,7 @@ public class EfRepository(FilmDbContext context) : IRepository
     {
         return context.Films
             .Include(f => f.ActorFilms)
-                .ThenInclude(af => af.Actor)
+            .ThenInclude(af => af.Actor)
             .SingleOrDefault(f => f.ImdbId == imdbId)?
             .ActorFilms.Select(af => af.Actor);
     }
@@ -83,10 +87,14 @@ public class EfRepository(FilmDbContext context) : IRepository
     public void DeleteActorFilm(ActorFilm actorFilm)
     {
         var film = context.Films.Find(actorFilm.Film.ImdbId);
+        
         if (film == null)
-        {
-            throw new Exception("Film not found");
-        }
+            throw new InvalidOperationException("Film not found");
+        
+        if (film.ActorFilms.All(af => af.Actor.ImdbId != actorFilm.Actor.ImdbId))
+            throw new InvalidOperationException(
+                "This actor is not associated with this film.");
+        
         film.ActorFilms.Remove(actorFilm);
         context.SaveChanges();
     }
@@ -101,8 +109,8 @@ public class EfRepository(FilmDbContext context) : IRepository
     {
         return context.Actors
             .Include(a => a.ActorFilms)
-                .ThenInclude(af => af.Film)
-                    .ThenInclude(f => f.Director)
+            .ThenInclude(af => af.Film)
+            .ThenInclude(f => f.Director)
             .SingleOrDefault(a => a.ImdbId == imdbId);
     }
 
@@ -115,7 +123,8 @@ public class EfRepository(FilmDbContext context) : IRepository
     {
         return context.Actors
             .Include(a => a.ActorFilms)
-                .ThenInclude(af => af.Film)
+            .ThenInclude(af => af.Film)
+            .ThenInclude(f => f.Director)  // ✅ Now load the director!
             .ToList();
     }
 
@@ -123,7 +132,7 @@ public class EfRepository(FilmDbContext context) : IRepository
     {
         return context.Actors
             .Include(a => a.ActorFilms)
-                .ThenInclude(af => af.Film)
+            .ThenInclude(af => af.Film)
             .Where(predicate)
             .ToList();
     }

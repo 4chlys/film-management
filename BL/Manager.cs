@@ -25,10 +25,18 @@ public class Manager(IRepository repository) : IManager
 
     public void AddActorToFilm(Guid filmId, Guid actorId, int? screenTime)
     {
+        var film = repository.ReadFilm(filmId);
+        var actor = repository.ReadActor(actorId);
+        
+        
+        if (film.ActorFilms.Any(af => af.Actor.ImdbId == actorId))
+            throw new InvalidOperationException(
+                $"{actor.Name} is already in the film '{film.Title}'.");
+    
         var actorFilm = new ActorFilm()
         {
-            Actor = repository.ReadActor(actorId),
-            Film = repository.ReadFilm(filmId),
+            Actor = actor,
+            Film = film,
             ScreenTime = screenTime
         };
         repository.CreateActorFilm(actorFilm);
@@ -70,15 +78,20 @@ public class Manager(IRepository repository) : IManager
         repository.DeleteFilm(film);
     }
 
-    public void RemoveActorOfFilm(Guid filmId, Guid actorId)
+    public void RemoveActorFromFilm(Guid filmId, Guid actorId)
     {
-        var actorFilm = new ActorFilm()
-        {
-            Actor = repository.ReadActor(actorId),
-            Film = repository.ReadFilm(filmId)
-        };
+        var film = repository.ReadFilm(filmId);
+        var actor = repository.ReadActor(actorId);
+        var actorFilm = film.ActorFilms
+            .SingleOrDefault(af => af.Actor.ImdbId == actorId);
+    
+        if (film.ActorFilms.All(af => af.Actor.ImdbId != actorId))
+            throw new InvalidOperationException(
+                $"{actor.Name} is not in the film '{film.Title}'.");
+        
         repository.DeleteActorFilm(actorFilm);
     }
+
 
     public Actor AddActor(string name, string nationality, DateTime dateOfBirth, DateTime? dateOfDeath)
     {
