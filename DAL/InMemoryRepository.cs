@@ -66,7 +66,12 @@ public class InMemoryRepository : IRepository
         InMemoryStorage.Films.Remove(film);
     }
 
-    public void DeleteActorFilm(ActorFilm actorFilm)
+    public void DeleteActorFilm(ActorFilm ActorId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool ActorFilmExists(Guid actorId, Guid filmId)
     {
         throw new NotImplementedException();
     }
@@ -120,33 +125,33 @@ public class InMemoryRepository : IRepository
     }
     
     //Director operations
-    public void CreateDirector(FilmDirector director)
+    public void CreateDirector(Director director)
     {
         director.ImdbId = Guid.NewGuid();
         InMemoryStorage.FilmDirectors.Add(director);
     }
 
-    public FilmDirector ReadDirector(Guid imdbId)
+    public Director ReadDirector(Guid imdbId)
     {
         return InMemoryStorage.FilmDirectors.SingleOrDefault(d => d.ImdbId == imdbId);       
     }
     
-    public IEnumerable<FilmDirector> ReadAllDirectors()
+    public IEnumerable<Director> ReadAllDirectors()
     {
         return InMemoryStorage.FilmDirectors;
     }
 
-    public IEnumerable<FilmDirector> ReadAllDirectorsWithFilms()
+    public IEnumerable<Director> ReadAllDirectorsWithFilms()
     {
         throw new NotImplementedException();
     }
 
-    public FilmDirector ReadDirectorByName(string name)
+    public Director ReadDirectorByName(string name)
     {
         return InMemoryStorage.FilmDirectors.FirstOrDefault(d => d.Name == name);
     }
 
-    public void UpdateDirectors(IEnumerable<FilmDirector> directors)
+    public void UpdateDirectors(IEnumerable<Director> directors)
     {
         foreach (var director in directors)
         {
@@ -162,7 +167,7 @@ public class InMemoryRepository : IRepository
         }
     }
     
-    public void DeleteDirector(FilmDirector director)
+    public void DeleteDirector(Director director)
     {
         InMemoryStorage.FilmDirectors.Remove(director);       
     }

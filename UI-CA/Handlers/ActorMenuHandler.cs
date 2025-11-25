@@ -196,17 +196,17 @@ public class ActorMenuHandler(IManager manager)
                 continue;
             }
 
-            var filmToRemove = manager.GetFilm(filmId);
-            if (filmToRemove == null)
+            var filmToRemoveFrom = manager.GetFilm(filmId);
+            if (filmToRemoveFrom == null)
             {
                 ValidationHelper.ShowErrorMessage("Film not found.");
                 continue;
             }
 
-            Console.WriteLine($"\nWhich actor would you like to remove from '{filmToRemove.Title}'?");
+            Console.WriteLine($"\nWhich actor would you like to remove from '{filmToRemoveFrom.Title}'?");
             Console.WriteLine("====================================================================");
             
-            var actorsInFilm = filmToRemove.ActorFilms.Select(af => af.Actor).ToList();
+            var actorsInFilm = manager.GetActorsOfFilm(filmId);
             
             if (!actorsInFilm.Any())
             {

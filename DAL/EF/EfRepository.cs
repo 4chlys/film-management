@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using FilmManagement.BL.Domain;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.EF;
 
 namespace FilmManagement.DAL.EF;
 
@@ -12,22 +13,12 @@ public class EfRepository(FilmDbContext context) : IRepository
         context.SaveChanges();
     }
 
-    public void CreateActorFilm(ActorFilm actorFilm)
+    public Film ReadFilm(Guid imdbId)
     {
-        var film = context.Films.Find(actorFilm.Film.ImdbId);
-        
-        if (film == null)
-            throw new InvalidOperationException("Film not found");
-        
-        if (film.ActorFilms.Any(af => af.Actor.ImdbId == actorFilm.Actor.ImdbId))
-            throw new InvalidOperationException(
-                "This actor is already associated with this film.");
-        
-        film.ActorFilms.Add(actorFilm);
-        context.SaveChanges();
+        return context.Films.Find(imdbId);
     }
 
-    public Film ReadFilm(Guid imdbId)
+    public Film ReadFilmWithActorsAndDirectors(Guid imdbId)
     {
         return context.Films
             .Include(f => f.Director)
@@ -66,7 +57,8 @@ public class EfRepository(FilmDbContext context) : IRepository
             .Include(f => f.ActorFilms)
             .ThenInclude(af => af.Actor)
             .SingleOrDefault(f => f.ImdbId == imdbId)?
-            .ActorFilms.Select(af => af.Actor);
+            .ActorFilms.Select(af => af.Actor)
+            .ToList();
     }
 
     public void UpdateFilms(IEnumerable<Film> films)
@@ -83,20 +75,36 @@ public class EfRepository(FilmDbContext context) : IRepository
         context.Films.Remove(film);
         context.SaveChanges();       
     }
+    
+    public void CreateActorFilm(ActorFilm actorFilm)
+    {
+        if (context.Entry(actorFilm.Actor).State == EntityState.Detached)
+            context.Actors.Attach(actorFilm.Actor);
+
+        if (context.Entry(actorFilm.Film).State == EntityState.Detached)
+            context.Films.Attach(actorFilm.Film);
+
+        context.ActorFilms.Add(actorFilm);
+        context.SaveChanges();
+    }
 
     public void DeleteActorFilm(ActorFilm actorFilm)
     {
-        var film = context.Films.Find(actorFilm.Film.ImdbId);
-        
-        if (film == null)
-            throw new InvalidOperationException("Film not found");
-        
-        if (film.ActorFilms.All(af => af.Actor.ImdbId != actorFilm.Actor.ImdbId))
-            throw new InvalidOperationException(
-                "This actor is not associated with this film.");
-        
-        film.ActorFilms.Remove(actorFilm);
+        if (context.Entry(actorFilm.Actor).State == EntityState.Detached)
+            context.Actors.Attach(actorFilm.Actor);
+    
+        if (context.Entry(actorFilm.Film).State == EntityState.Detached)
+            context.Films.Attach(actorFilm.Film);
+
+        context.ActorFilms.Remove(actorFilm);
         context.SaveChanges();
+    }
+
+    public bool ActorFilmExists(Guid actorId, Guid filmId)
+    {
+        return context.ActorFilms.Any(af => 
+            Property<Guid>(af, "ActorFK_Shadow") == actorId 
+            && Property<Guid>(af, "FilmFK_Shadow") == filmId);
     }
 
     public void CreateActor(Actor actor)
@@ -106,6 +114,11 @@ public class EfRepository(FilmDbContext context) : IRepository
     }
 
     public Actor ReadActor(Guid imdbId)
+    {
+        return context.Actors.Find(imdbId);
+    }
+
+    public Actor ReadActorWithFilms(Guid imdbId)
     {
         return context.Actors
             .Include(a => a.ActorFilms)
@@ -124,7 +137,7 @@ public class EfRepository(FilmDbContext context) : IRepository
         return context.Actors
             .Include(a => a.ActorFilms)
             .ThenInclude(af => af.Film)
-            .ThenInclude(f => f.Director)  // ✅ Now load the director!
+            .ThenInclude(f => f.Director) 
             .ToList();
     }
 
@@ -152,39 +165,44 @@ public class EfRepository(FilmDbContext context) : IRepository
         context.SaveChanges();
     }
 
-    public void CreateDirector(FilmDirector director)
+    public void CreateDirector(Director director)
     {
         context.Directors.Add(director);
         context.SaveChanges();
     }
 
-    public FilmDirector ReadDirector(Guid imdbId)
+    public Director ReadDirector(Guid imdbId)
+    {
+        return context.Directors.Find(imdbId);
+    }
+    
+    public Director ReadDirectorWithFilms(Guid imdbId)
     {
         return context.Directors
             .Include(d => d.Films)
             .SingleOrDefault(d => d.ImdbId == imdbId);
     }
     
-    public IEnumerable<FilmDirector> ReadAllDirectors()
+    public IEnumerable<Director> ReadAllDirectors()
     {
         return context.Directors.ToList();
     }
 
-    public IEnumerable<FilmDirector> ReadAllDirectorsWithFilms()
+    public IEnumerable<Director> ReadAllDirectorsWithFilms()
     {
         return context.Directors
             .Include(d => d.Films)
             .ToList();
     }
 
-    public FilmDirector ReadDirectorByName(string name)
+    public Director ReadDirectorByName(string name)
     {
         return context.Directors
             .Include(d => d.Films)
             .FirstOrDefault(d => d.Name == name);
     }
 
-    public void UpdateDirectors(IEnumerable<FilmDirector> directors)
+    public void UpdateDirectors(IEnumerable<Director> directors)
     {
         foreach (var director in directors)
         {
@@ -193,7 +211,7 @@ public class EfRepository(FilmDbContext context) : IRepository
         context.SaveChanges();
     }
 
-    public void DeleteDirector(FilmDirector director)
+    public void DeleteDirector(Director director)
     {
         context.Directors.Remove(director);
         context.SaveChanges();

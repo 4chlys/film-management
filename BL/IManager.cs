@@ -6,7 +6,7 @@ namespace FilmManagement.BL;
 
 public interface IManager
 {
-    Film AddFilm(string title, Genre genre, DateTime releaseDate, double rating, FilmDirector director);
+    Film AddFilm(string title, Genre genre, DateTime releaseDate, double rating, Director director);
     void AddActorToFilm(Guid filmId, Guid actorId, int? screenTime);
     Film GetFilm(Guid imdbId);   
     IEnumerable<Film> GetAllFilms();
@@ -21,16 +21,17 @@ public interface IManager
     IEnumerable<Actor> GetAllActors();
     IEnumerable<Actor> GetAllActorsWithFilms();
     IEnumerable<Actor> GetActorsByCriteria(string nameFilter, int? minimumAge);
+    IEnumerable<Actor> GetActorsOfFilm(Guid imdbId);
     void ChangeActors(IEnumerable<Actor> actors);
     void RemoveActor(Actor actor);
     
-    FilmDirector AddDirector(string name, string country, int? yearStarted, int? yearEnded); 
-    FilmDirector GetDirector(Guid imdbId);
-    FilmDirector GetDirectorByName(string name);
-    IEnumerable<FilmDirector> GetAllDirectors();
-    IEnumerable<FilmDirector> GetAllDirectorsWithFilms();
-    void ChangeDirectors(IEnumerable<FilmDirector> directors);
-    void RemoveDirector(FilmDirector director);
+    Director AddDirector(string name, string country, int? yearStarted, int? yearEnded); 
+    Director GetDirector(Guid imdbId);
+    Director GetDirectorByName(string name);
+    IEnumerable<Director> GetAllDirectors();
+    IEnumerable<Director> GetAllDirectorsWithFilms();
+    void ChangeDirectors(IEnumerable<Director> directors);
+    void RemoveDirector(Director director);
     
     IEnumerable<Genre> GetAllGenres();
 }

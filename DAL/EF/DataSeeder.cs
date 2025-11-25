@@ -7,14 +7,14 @@ public static class DataSeeder
     public static void Seed(FilmDbContext context)
     {
         // === DIRECTORS ===
-        var lanthimos = new FilmDirector 
+        var lanthimos = new Director 
         { 
             Name = "Yorgos Lanthimos", 
             Country = "Greece", 
             CareerStart = 2001
         };
         
-        var kubrick = new FilmDirector 
+        var kubrick = new Director 
         { 
             Name = "Stanley Kubrick", 
             Country = "USA", 
@@ -22,7 +22,7 @@ public static class DataSeeder
             CareerEnd = 1999
         };
         
-        var lynch = new FilmDirector 
+        var lynch = new Director 
         { 
             Name = "David Lynch", 
             Country = "USA", 
@@ -30,14 +30,14 @@ public static class DataSeeder
             CareerEnd = 2006
         };
         
-        var eggers = new FilmDirector 
+        var eggers = new Director 
         { 
             Name = "Robert Eggers", 
             Country = "USA", 
             CareerStart = 2015
         };
 
-        var godard = new FilmDirector
+        var godard = new Director
         {
             Name = "Jean-Luc Godard",
             Country = "France",

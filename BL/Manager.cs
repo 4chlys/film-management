@@ -7,7 +7,7 @@ namespace FilmManagement.BL;
 
 public class Manager(IRepository repository) : IManager
 {
-    public Film AddFilm(string title, Genre genre, DateTime releaseDate, double rating, FilmDirector director)
+    public Film AddFilm(string title, Genre genre, DateTime releaseDate, double rating, Director director)
     {
         var filmToCreate = new Film
         {
@@ -23,25 +23,6 @@ public class Manager(IRepository repository) : IManager
         return filmToCreate;
     }
 
-    public void AddActorToFilm(Guid filmId, Guid actorId, int? screenTime)
-    {
-        var film = repository.ReadFilm(filmId);
-        var actor = repository.ReadActor(actorId);
-        
-        
-        if (film.ActorFilms.Any(af => af.Actor.ImdbId == actorId))
-            throw new InvalidOperationException(
-                $"{actor.Name} is already in the film '{film.Title}'.");
-    
-        var actorFilm = new ActorFilm()
-        {
-            Actor = actor,
-            Film = film,
-            ScreenTime = screenTime
-        };
-        repository.CreateActorFilm(actorFilm);
-    }
-
     public Film GetFilm(Guid imdbId)
     {
         return repository.ReadFilm(imdbId);       
@@ -49,7 +30,7 @@ public class Manager(IRepository repository) : IManager
 
     public IEnumerable<Film> GetAllFilms()
     {
-        return repository.ReadAllFilmsWithActorsAndDirectors();
+        return repository.ReadAllFilms();
     }
 
     public IEnumerable<Film> GetAllFilmsWithActorsAndDirectors()
@@ -77,18 +58,53 @@ public class Manager(IRepository repository) : IManager
     {
         repository.DeleteFilm(film);
     }
+    
+    public void AddActorToFilm(Guid filmId, Guid actorId, int? screenTime)
+    {
+        var film = repository.ReadFilm(filmId);
+        var actor = repository.ReadActor(actorId);
+
+        if (film == null)
+            throw new InvalidOperationException("Film not found.");
+        if (actor == null)
+            throw new InvalidOperationException("Actor not found.");
+
+        var actorFilm = new ActorFilm
+        {
+            Actor = actor,
+            Film = film,
+            ScreenTime = screenTime
+        };
+        
+        EntityValidator.ValidateEntity(actorFilm);
+
+        if (repository.ActorFilmExists(actorId, filmId))
+            throw new InvalidOperationException(
+                "This actor is already associated with this film.");
+
+        repository.CreateActorFilm(actorFilm);
+    }
 
     public void RemoveActorFromFilm(Guid filmId, Guid actorId)
     {
         var film = repository.ReadFilm(filmId);
         var actor = repository.ReadActor(actorId);
-        var actorFilm = film.ActorFilms
-            .SingleOrDefault(af => af.Actor.ImdbId == actorId);
-    
-        if (film.ActorFilms.All(af => af.Actor.ImdbId != actorId))
+
+        if (film == null)
+            throw new InvalidOperationException("Film not found.");
+        if (actor == null)
+            throw new InvalidOperationException("Actor not found.");
+
+        if (!repository.ActorFilmExists(actorId, filmId))
             throw new InvalidOperationException(
-                $"{actor.Name} is not in the film '{film.Title}'.");
-        
+                "This actor is not associated with this film.");
+
+        var actorFilm = new ActorFilm
+        {
+            Actor = actor,
+            Film = film
+        };
+
         repository.DeleteActorFilm(actorFilm);
     }
 
@@ -115,7 +131,7 @@ public class Manager(IRepository repository) : IManager
 
     public IEnumerable<Actor> GetAllActors()
     {
-        return repository.ReadAllActorsWithFilms();
+        return repository.ReadAllActors();
     }
 
     public IEnumerable<Actor> GetAllActorsWithFilms()
@@ -143,6 +159,11 @@ public class Manager(IRepository repository) : IManager
         
         return repository.ReadActorsByCriteria(predicate);
     }
+    
+    public IEnumerable<Actor> GetActorsOfFilm(Guid imdbId)
+    {
+        return repository.ReadActorsOfFilm(imdbId);
+    }
 
     public void ChangeActors(IEnumerable<Actor> actors)
     {
@@ -158,9 +179,9 @@ public class Manager(IRepository repository) : IManager
         repository.DeleteActor(actor);
     }
 
-    public FilmDirector AddDirector(string name, string country, int? yearStarted, int? yearEnded)
+    public Director AddDirector(string name, string country, int? yearStarted, int? yearEnded)
     {
-        var filmDirectorToCreate = new FilmDirector
+        var filmDirectorToCreate = new Director
         {
             Name = name,
             Country = country,
@@ -173,27 +194,27 @@ public class Manager(IRepository repository) : IManager
         return filmDirectorToCreate;
     }
 
-    public FilmDirector GetDirector(Guid imdbId)
+    public Director GetDirector(Guid imdbId)
     {
         return repository.ReadDirector(imdbId);      
     }
 
-    public FilmDirector GetDirectorByName(string name)
+    public Director GetDirectorByName(string name)
     {
         return repository.ReadDirectorByName(name);
     }
 
-    public IEnumerable<FilmDirector> GetAllDirectors()
+    public IEnumerable<Director> GetAllDirectors()
     {
-        return repository.ReadAllDirectorsWithFilms();
+        return repository.ReadAllDirectors();
     }
 
-    public IEnumerable<FilmDirector> GetAllDirectorsWithFilms()
+    public IEnumerable<Director> GetAllDirectorsWithFilms()
     {
         return repository.ReadAllDirectorsWithFilms();
     }
     
-    public void ChangeDirectors(IEnumerable<FilmDirector> directors)
+    public void ChangeDirectors(IEnumerable<Director> directors)
     {
         foreach (var director in directors)
         {
@@ -202,7 +223,7 @@ public class Manager(IRepository repository) : IManager
         repository.UpdateDirectors(directors);
     }
     
-    public void RemoveDirector(FilmDirector director)
+    public void RemoveDirector(Director director)
     {
         repository.DeleteDirector(director);
     }

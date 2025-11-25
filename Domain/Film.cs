@@ -22,7 +22,7 @@ public class Film
     [Range(0, 10)]
     public double Rating { get; set; }
     
-    public FilmDirector Director { get; set; }
+    public Director Director { get; set; }
 
     public ICollection<ActorFilm> ActorFilms { get; init; } = [];
 }

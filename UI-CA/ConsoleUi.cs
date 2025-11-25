@@ -41,11 +41,9 @@ public class ConsoleUi(IManager manager)
         Console.WriteLine("=== Film Management System Menu ===");
         Console.WriteLine("===================================");
         Console.WriteLine("0) Quit");
-        Console.WriteLine("\n--- Films ---");
         Console.WriteLine("1) Show all films");
         Console.WriteLine("2) Show films by genre");
         Console.WriteLine("3) Add a film");
-        Console.WriteLine("\n--- Actors ---");
         Console.WriteLine("4) Show all actors");
         Console.WriteLine("5) Show actors with criteria");
         Console.WriteLine("6) Add an actor");

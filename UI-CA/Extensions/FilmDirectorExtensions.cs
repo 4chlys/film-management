@@ -4,7 +4,7 @@ using FilmManagement.BL.Domain;
 
 public static class FilmDirectorExtensions
 {
-    public static string GetInfo(this FilmDirector director)
+    public static string GetInfo(this Director director)
     {
         if (director.CareerStart.HasValue)
         {

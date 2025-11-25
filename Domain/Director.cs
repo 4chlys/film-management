@@ -4,7 +4,7 @@ using FilmManagement.BL.Domain.Validation;
 
 namespace FilmManagement.BL.Domain;
 
-public class FilmDirector : IValidatableObject
+public class Director : IValidatableObject
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

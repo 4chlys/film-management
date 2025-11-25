@@ -6,7 +6,6 @@ namespace FilmManagement.DAL;
 public interface IRepository
 {
     void CreateFilm(Film film);
-    void CreateActorFilm(ActorFilm actorFilm);
     Film ReadFilm(Guid imdbId);
     IEnumerable<Film> ReadAllFilms();
     IEnumerable<Film> ReadAllFilmsWithActorsAndDirectors();
@@ -14,7 +13,10 @@ public interface IRepository
     IEnumerable<Actor> ReadActorsOfFilm(Guid imdbId);
     void UpdateFilms(IEnumerable<Film> films);
     void DeleteFilm(Film film);
+    
+    void CreateActorFilm(ActorFilm actorFilm);
     void DeleteActorFilm(ActorFilm actorFilm);
+    bool ActorFilmExists(Guid actorId, Guid filmId);
     
     void CreateActor(Actor actor);
     Actor ReadActor(Guid imdbId);
@@ -24,11 +26,11 @@ public interface IRepository
     void UpdateActors(IEnumerable<Actor> actors);
     void DeleteActor(Actor actor);
     
-    void CreateDirector(FilmDirector director); 
-    FilmDirector ReadDirector(Guid imdbId);
-    FilmDirector ReadDirectorByName(string name);
-    IEnumerable<FilmDirector> ReadAllDirectors();
-    IEnumerable<FilmDirector> ReadAllDirectorsWithFilms();
-    void UpdateDirectors(IEnumerable<FilmDirector> directors);
-    void DeleteDirector(FilmDirector director);
+    void CreateDirector(Director director); 
+    Director ReadDirector(Guid imdbId);
+    Director ReadDirectorByName(string name);
+    IEnumerable<Director> ReadAllDirectors();
+    IEnumerable<Director> ReadAllDirectorsWithFilms();
+    void UpdateDirectors(IEnumerable<Director> directors);
+    void DeleteDirector(Director director);
 }

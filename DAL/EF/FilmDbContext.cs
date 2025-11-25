@@ -9,7 +9,8 @@ public class FilmDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<Film> Films { get; set; }
     public DbSet<Actor> Actors { get; set; }
-    public DbSet<FilmDirector> Directors { get; set; }
+    public DbSet<ActorFilm> ActorFilms { get; set; }
+    public DbSet<Director> Directors { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -32,27 +33,24 @@ public class FilmDbContext(DbContextOptions options) : DbContext(options)
         
         modelBuilder.Entity<ActorFilm>()
             .HasKey("ActorFK_Shadow", "FilmFK_Shadow");
-        
+
         modelBuilder.Entity<Film>()
             .HasOne(film => film.Director)
             .WithMany(director => director.Films)
             .HasForeignKey("DirectorFK_Shadow")
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
-        
+            .IsRequired(false);
+
         modelBuilder.Entity<ActorFilm>()
             .HasOne(af => af.Actor)
             .WithMany(actor => actor.ActorFilms)
             .HasForeignKey("ActorFK_Shadow")
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
-        
+            .IsRequired();
+
         modelBuilder.Entity<ActorFilm>()
             .HasOne(af => af.Film)
             .WithMany(film => film.ActorFilms)
             .HasForeignKey("FilmFK_Shadow")
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+            .IsRequired();
         
         base.OnModelCreating(modelBuilder);
     }
