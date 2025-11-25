@@ -152,7 +152,6 @@ FROM "Actors" AS "a"
 ```mermaid
 classDiagram
     class Actor {
-        -ICollection~ActorFilm~ _actorFilms
         +Guid ImdbId
         +string Name
         +string Nationality
@@ -160,13 +159,11 @@ classDiagram
         +DateTime? DateOfDeath
         +int Age
         +ICollection~ActorFilm~ ActorFilms
-        +AddFilm(Film) void
         +Validate(ValidationContext) IEnumerable~ValidationResult~
         -CalculateAge(DateTime, DateTime?) int
     }
 
     class Film {
-        -ICollection~ActorFilm~ _actorFilms
         +Guid ImdbId
         +string Title
         +Genre Genre
@@ -174,24 +171,21 @@ classDiagram
         +double Rating
         +FilmDirector Director
         +ICollection~ActorFilm~ ActorFilms
-        +AddActor(Actor) void
     }
 
     class ActorFilm {
         +Actor Actor
         +Film Film
-        +int ScreenTime
+        +int? ScreenTime
     }
 
     class FilmDirector {
-        -ICollection~Film~ _films
         +Guid ImdbId
         +string Name
         +string Country
         +int? CareerStart
         +int? CareerEnd
         +ICollection~Film~ Films
-        +AddFilm(Film) void
         +Validate(ValidationContext) IEnumerable~ValidationResult~
     }
 
