@@ -53,11 +53,8 @@ public class EfRepository(FilmDbContext context) : IRepository
 
     public IEnumerable<Actor> ReadActorsOfFilm(Guid imdbId)
     {
-        return context.Films
-            .Include(f => f.ActorFilms)
-            .ThenInclude(af => af.Actor)
-            .SingleOrDefault(f => f.ImdbId == imdbId)?
-            .ActorFilms.Select(af => af.Actor)
+        return context.Actors
+            .Where(actor => actor.ActorFilms.Any(af => af.Film.ImdbId == imdbId))
             .ToList();
     }
 

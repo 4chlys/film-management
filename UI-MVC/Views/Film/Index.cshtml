@@ -1,0 +1,12 @@
+@model IEnumerable<Film>
+
+@{
+    ViewBag.Title = "Films";
+}
+
+<ul>
+    @foreach (var film in Model)
+    {
+        <li>@film.Title</li>
+    }
+</ul>
