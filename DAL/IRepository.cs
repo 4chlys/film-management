@@ -7,6 +7,7 @@ public interface IRepository
 {
     void CreateFilm(Film film);
     Film ReadFilm(Guid imdbId);
+    Film ReadFilmWithActorsAndDirectors(Guid imdbId);
     IEnumerable<Film> ReadAllFilms();
     IEnumerable<Film> ReadAllFilmsWithActorsAndDirectors();
     IEnumerable<Film> ReadFilmsByCriteria(Expression<Func<Film, bool>> predicate);
@@ -20,6 +21,7 @@ public interface IRepository
     
     void CreateActor(Actor actor);
     Actor ReadActor(Guid imdbId);
+    Actor ReadActorWithFilms(Guid imdbId);
     IEnumerable<Actor> ReadAllActors();
     IEnumerable<Actor> ReadAllActorsWithFilms();
     IEnumerable<Actor> ReadActorsByCriteria(Expression<Func<Actor, bool>> predicate);
@@ -28,6 +30,7 @@ public interface IRepository
     
     void CreateDirector(Director director); 
     Director ReadDirector(Guid imdbId);
+    Director ReadDirectorWithFilms(Guid imdbId);
     Director ReadDirectorByName(string name);
     IEnumerable<Director> ReadAllDirectors();
     IEnumerable<Director> ReadAllDirectorsWithFilms();

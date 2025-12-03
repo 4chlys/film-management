@@ -10,30 +10,41 @@
             <dd class="col-sm-9">@Model.Genre.ToString()</dd>
 
             <dt class="col-sm-3">Release Date</dt>
-            <dd class="col-sm-9">@Model.ReleaseDate.ToString("MMM dd, yyyy")</dd>
+            <dd class="col-sm-9">@Model.ReleaseDate.ToString("dd/MM/yyyy")</dd>
 
             <dt class="col-sm-3">Rating</dt>
             <dd class="col-sm-9">@Model.Rating.ToString("F1") / 10</dd>
 
             <dt class="col-sm-3">Director</dt>
-            <dd class="col-sm-9">@(Model.Director?.Name ?? "No director assigned")</dd>
+            <dd class="col-sm-9">@(Model.Director?.Name ?? "unknown")</dd>
 
             <dt class="col-sm-3">Actors</dt>
             <dd class="col-sm-9">
                 @if (Model.ActorFilms != null && Model.ActorFilms.Any())
                 {
-                    <ul class="mb-0">
-                        @foreach (var actorFilm in Model.ActorFilms)
-                        {
-                            <li>
-                                @actorFilm.Actor.Name
-                                @if (actorFilm.ScreenTime.HasValue)
-                                {
-                                    <span class="text-muted">(@actorFilm.ScreenTime min)</span>
-                                }
-                            </li>
-                        }
-                    </ul>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date of Birth</th>
+                                <th>Screen Time</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var actorFilm in Model.ActorFilms)
+                            {
+                                <tr>
+                                    <td>@actorFilm.Actor.Name</td>
+                                    <td>@actorFilm.Actor.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                                    <td>@(actorFilm.ScreenTime?.ToString() ?? "unknown") min</td>
+                                    <td>
+                                        <a asp-controller="Actor" asp-action="Details" asp-route-id="@actorFilm.Actor.ImdbId">Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 }
                 else
                 {

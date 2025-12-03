@@ -1,4 +1,4 @@
-namespace FilmManagement.UI.WEB.Models;
+namespace FilmManagement.UI.Web.Models;
 
 public class ErrorViewModel
 {

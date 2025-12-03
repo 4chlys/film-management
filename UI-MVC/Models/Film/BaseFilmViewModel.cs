@@ -1,16 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 using FilmManagement.BL.Domain;
 using FilmManagement.BL.Domain.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FilmManagement.UI.Web.Models.Film;
 
-public class DetailsFilmViewModel
+public abstract class BaseFilmViewModel
 {
-    public Guid ImdbId { get; set; }
-    
     [Required]
     [StringLength(100, MinimumLength = 3)]
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
     
     [CustomValidation(typeof(EnumValidator), "DefinedValuesOnly")]
     public Genre Genre { get; set; }
@@ -20,4 +19,10 @@ public class DetailsFilmViewModel
     
     [Range(0, 10)]
     public double Rating { get; set; }
+
+    public Guid? DirectorId { get; set; }
+    public List<Guid> SelectedActorIds { get; set; } = new();
+    
+    public SelectList Directors { get; set; }
+    public SelectList Actors { get; set; }
 }

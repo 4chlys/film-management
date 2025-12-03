@@ -1,13 +1,39 @@
-@model IEnumerable<FilmManagement.BL.Domain.Film>
+@model IEnumerable<Film>
 
 @{
-    ViewBag.Title = "List of Films";
+    ViewBag.Title = "Films";
 }
 
-<a asp-controller="Film" asp-action="Create">New</a>
-<ul>
+<h2>All Films</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Film</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Genre</th>
+        <th>Release Date</th>
+        <th>Rating</th>
+        <th>Director</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
     @foreach (var film in Model)
     {
-        <li><a asp-controller="Film" asp-action="Details" asp-route-id="@film.ImdbId">@film.Title</a></li>
+        <tr>
+            <td>@film.Title</td>
+            <td>@film.Genre.ToString()</td>
+            <td>@film.ReleaseDate.ToString("dd/MM/yyyy")</td>
+            <td>@film.Rating.ToString("F1")</td>
+            <td>@(film.Director?.Name ?? "unknown")</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@film.ImdbId">Details</a>
+            </td>
+        </tr>
     }
-</ul>
+    </tbody>
+</table>

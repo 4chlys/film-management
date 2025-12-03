@@ -23,6 +23,11 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.Films.SingleOrDefault(f => f.ImdbId == imdbId);       
     }
 
+    public Film ReadFilmWithActorsAndDirectors(Guid imdbId)
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<Film> ReadAllFilms()
     {
         return InMemoryStorage.Films;
@@ -84,7 +89,12 @@ public class InMemoryRepository : IRepository
     {
         return InMemoryStorage.Actors.SingleOrDefault(a => a.ImdbId == imdbId);       
     }
-    
+
+    public Actor ReadActorWithFilms(Guid imdbId)
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<Actor> ReadAllActors()
     {
         return InMemoryStorage.Actors;
@@ -129,7 +139,12 @@ public class InMemoryRepository : IRepository
     {
         return InMemoryStorage.FilmDirectors.SingleOrDefault(d => d.ImdbId == imdbId);       
     }
-    
+
+    public Director ReadDirectorWithFilms(Guid imdbId)
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<Director> ReadAllDirectors()
     {
         return InMemoryStorage.FilmDirectors;

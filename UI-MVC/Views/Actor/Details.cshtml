@@ -1,0 +1,66 @@
+@model Actor
+
+@{
+    ViewBag.Title = $"{Model.Name} - Actor Details";
+}
+
+<h2>Actor Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Nationality</dt>
+            <dd class="col-sm-9">@Model.Nationality</dd>
+
+            <dt class="col-sm-3">Date of Birth</dt>
+            <dd class="col-sm-9">@Model.DateOfBirth.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Date of Death</dt>
+            <dd class="col-sm-9">@(Model.DateOfDeath?.ToString("dd/MM/yyyy") ?? "Still alive")</dd>
+
+            <dt class="col-sm-3">Age</dt>
+            <dd class="col-sm-9">@Model.Age</dd>
+
+            <dt class="col-sm-3">Films</dt>
+            <dd class="col-sm-9">
+                @if (Model.ActorFilms != null && Model.ActorFilms.Any())
+                {
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Screen Time</th>
+                                <th>Director</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var actorFilm in Model.ActorFilms)
+                            {
+                                <tr>
+                                    <td>@actorFilm.Film.Title</td>
+                                    <td>@(actorFilm.ScreenTime?.ToString() ?? "unknown") min</td>
+                                    <td>@(actorFilm.Film.Director?.Name ?? "unknown")</td>
+                                    <td>
+                                        <a asp-controller="Film" asp-action="Details" asp-route-id="@actorFilm.Film.ImdbId">Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <span class="text-muted">No films listed</span>
+                }
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-controller="Film" asp-action="Index" class="btn btn-secondary">Back to Films</a>
+</div>

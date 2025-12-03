@@ -1,6 +1,6 @@
 using FilmManagement.BL;
 using FilmManagement.BL.Domain;
-using FilmManagement.UI.WEB.Models.Film;
+using FilmManagement.UI.Web.Models.Film;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -84,14 +84,14 @@ public class FilmController(IManager filmManager) : Controller
 
     public IActionResult Details(Guid id)
     {
-        var film = filmManager.GetFilm(id);
+        var film = filmManager.GetFilmWithActorsAndDirectors(id);
         return View(film);
     }
 
     [HttpGet]
     public IActionResult Edit(Guid id)
     {
-        var film = filmManager.GetFilm(id);
+        var film = filmManager.GetFilmWithActorsAndDirectors(id);
         
         if (film == null)
         {

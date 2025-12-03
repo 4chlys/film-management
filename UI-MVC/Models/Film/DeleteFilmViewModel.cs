@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace FilmManagement.UI.WEB.Models.Film;
+namespace FilmManagement.UI.Web.Models.Film;
 
 public class DeleteFilmViewModel
 {

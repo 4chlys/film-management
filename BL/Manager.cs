@@ -28,6 +28,11 @@ public class Manager(IRepository repository) : IManager
         return repository.ReadFilm(imdbId);       
     }
 
+    public Film GetFilmWithActorsAndDirectors(Guid imdbId)
+    {
+        return repository.ReadFilmWithActorsAndDirectors(imdbId);      
+    }
+
     public IEnumerable<Film> GetAllFilms()
     {
         return repository.ReadAllFilms();
@@ -126,6 +131,11 @@ public class Manager(IRepository repository) : IManager
         return repository.ReadActor(imdbId);       
     }
 
+    public Actor GetActorWithFilms(Guid imdbId)
+    {
+        return repository.ReadActorWithFilms(imdbId);      
+    }
+
     public IEnumerable<Actor> GetAllActors()
     {
         return repository.ReadAllActors();
@@ -191,6 +201,11 @@ public class Manager(IRepository repository) : IManager
     public Director GetDirector(Guid imdbId)
     {
         return repository.ReadDirector(imdbId);      
+    }
+
+    public Director GetDirectorWithFilms(Guid imdbId)
+    {
+        return repository.ReadDirectorWithFilms(imdbId);     
     }
 
     public Director GetDirectorByName(string name)
