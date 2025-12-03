@@ -1,23 +1,18 @@
-@model Film
+@model FilmManagement.UI.Web.Models.Film.DetailsFilmViewModel
 
 <div class="card">
     <div class="card-body">
         <dl class="row">
             <dt class="col-sm-3">Title</dt>
             <dd class="col-sm-9">@Model.Title</dd>
-
             <dt class="col-sm-3">Genre</dt>
             <dd class="col-sm-9">@Model.Genre.ToString()</dd>
-
             <dt class="col-sm-3">Release Date</dt>
             <dd class="col-sm-9">@Model.ReleaseDate.ToString("dd/MM/yyyy")</dd>
-
             <dt class="col-sm-3">Rating</dt>
             <dd class="col-sm-9">@Model.Rating.ToString("F1") / 10</dd>
-
             <dt class="col-sm-3">Director</dt>
             <dd class="col-sm-9">@(Model.Director?.Name ?? "unknown")</dd>
-
             <dt class="col-sm-3">Actors</dt>
             <dd class="col-sm-9">
                 @if (Model.ActorFilms != null && Model.ActorFilms.Any())

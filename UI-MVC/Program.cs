@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<FilmDbContext>(optionsBuilder => optionsBuilder.UseSqlite("Data Source=FilmManagementDb.sqlite"));
 builder.Services.AddScoped<IRepository, EfRepository>();
 builder.Services.AddScoped<IManager, Manager>();
+
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -16,7 +17,10 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var ctx = scope.ServiceProvider.GetService<FilmDbContext>();
-    ctx.Database.EnsureCreated();
+    if (ctx.CreateDatabase(dropDatabase: true))
+    {
+        DataSeeder.Seed(ctx);
+    }
 }
 
 

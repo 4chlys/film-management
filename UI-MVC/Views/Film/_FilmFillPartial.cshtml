@@ -8,9 +8,13 @@
 
 <div class="form-group">
     <label asp-for="Genre"></label>
-    <select asp-for="Genre" class="form-control" asp-items="Html.GetEnumSelectList<Genre>()">
-        <option value="">-- Select Genre --</option>
-    </select>
+    @foreach (Genre genre in Enum.GetValues(typeof(Genre)))
+    {
+        <label>
+            <input type="checkbox" name="SelectedGenres" value="@genre" />
+            @genre
+        </label>
+    }
     <span asp-validation-for="Genre" class="text-danger"></span>
 </div>
 

@@ -1,4 +1,4 @@
-@model Film
+@model FilmManagement.UI.Web.Models.Film.DetailsFilmViewModel
 
 @{
     ViewBag.Title = "Film Details";
@@ -6,7 +6,7 @@
 
 <h2>Film Details</h2>
 
-<partial name="_FilmDetails" model="Model" />
+<partial name="_FilmDetailsPartial" model="Model" />
 
 <div class="mt-3">
     <a asp-action="Edit" asp-route-id="@Model.ImdbId" class="btn btn-primary">Edit</a>

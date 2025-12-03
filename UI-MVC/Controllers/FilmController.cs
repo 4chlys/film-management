@@ -85,7 +85,17 @@ public class FilmController(IManager filmManager) : Controller
     public IActionResult Details(Guid id)
     {
         var film = filmManager.GetFilmWithActorsAndDirectors(id);
-        return View(film);
+
+        var detailFilm = new DetailsFilmViewModel()
+        {
+            ImdbId = film.ImdbId,
+            Genre = film.Genre,
+            ReleaseDate = film.ReleaseDate,
+            Rating = film.Rating,
+            DirectorId = film.Director.ImdbId,
+            SelectedActorIds = filmManager.GetActorsOfFilm(id).Select(a => a.ImdbId).ToList()
+        };
+        return View(detailFilm);
     }
 
     [HttpGet]
