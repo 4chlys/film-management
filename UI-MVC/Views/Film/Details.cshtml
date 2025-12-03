@@ -1,0 +1,15 @@
+@model Film
+
+@{
+    ViewBag.Title = "Film Details";
+}
+
+<h2>Film Details</h2>
+
+<partial name="_FilmDetails" model="Model" />
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.ImdbId" class="btn btn-primary">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.ImdbId" class="btn btn-danger">Delete</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

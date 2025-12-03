@@ -1,12 +1,13 @@
-@model IEnumerable<Film>
+@model IEnumerable<FilmManagement.BL.Domain.Film>
 
 @{
-    ViewBag.Title = "Films";
+    ViewBag.Title = "List of Films";
 }
 
+<a asp-controller="Film" asp-action="Create">New</a>
 <ul>
     @foreach (var film in Model)
     {
-        <li>@film.Title</li>
+        <li><a asp-controller="Film" asp-action="Details" asp-route-id="@film.ImdbId">@film.Title</a></li>
     }
 </ul>
