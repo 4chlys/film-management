@@ -58,12 +58,9 @@ public class EfRepository(FilmDbContext context) : IRepository
             .ToList();
     }
 
-    public void UpdateFilms(IEnumerable<Film> films)
+    public void UpdateFilm(Film film)
     {
-        foreach (var film in films)
-        {
-            context.Films.Update(film);
-        }
+        context.Films.Update(film);
         context.SaveChanges();  
     }
 
@@ -147,12 +144,9 @@ public class EfRepository(FilmDbContext context) : IRepository
             .ToList();
     }
 
-    public void UpdateActors(IEnumerable<Actor> actors)
+    public void UpdateActor(Actor actor)
     {
-        foreach (var actor in actors)
-        {
-            context.Actors.Update(actor);
-        }
+        context.Actors.Update(actor);
         context.SaveChanges();
     }
 
@@ -199,12 +193,10 @@ public class EfRepository(FilmDbContext context) : IRepository
             .FirstOrDefault(d => d.Name == name);
     }
 
-    public void UpdateDirectors(IEnumerable<Director> directors)
+    public void UpdateDirector(Director director)
     {
-        foreach (var director in directors)
-        {
-            context.Directors.Update(director);
-        }
+       
+        context.Directors.Update(director);
         context.SaveChanges();
     }
 

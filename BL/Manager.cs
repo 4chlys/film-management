@@ -45,13 +45,10 @@ public class Manager(IRepository repository) : IManager
         return repository.ReadFilmsByCriteria(predicate);
     }
 
-    public void ChangeFilms(IEnumerable<Film> films)
+    public void ChangeFilm(Film film)
     {
-        foreach (var film in films)
-        {
-            EntityValidator.ValidateEntity(film);
-        }
-        repository.UpdateFilms(films);
+        EntityValidator.ValidateEntity(film);
+        repository.UpdateFilm(film);
     }
     
     public void RemoveFilm(Film film)
@@ -165,13 +162,10 @@ public class Manager(IRepository repository) : IManager
         return repository.ReadActorsOfFilm(imdbId);
     }
 
-    public void ChangeActors(IEnumerable<Actor> actors)
+    public void ChangeActor(Actor actor)
     {
-        foreach (var actor in actors)
-        {
-            EntityValidator.ValidateEntity(actor);
-        }
-        repository.UpdateActors(actors);
+        EntityValidator.ValidateEntity(actor);
+        repository.UpdateActor(actor);
     }
     
     public void RemoveActor(Actor actor)
@@ -214,13 +208,10 @@ public class Manager(IRepository repository) : IManager
         return repository.ReadAllDirectorsWithFilms();
     }
     
-    public void ChangeDirectors(IEnumerable<Director> directors)
+    public void ChangeDirector(Director director)
     {
-        foreach (var director in directors)
-        {
-            EntityValidator.ValidateEntity(director);
-        }
-        repository.UpdateDirectors(directors);
+        EntityValidator.ValidateEntity(director);
+        repository.UpdateDirector(director);
     }
     
     public void RemoveDirector(Director director)

@@ -11,7 +11,7 @@ public interface IRepository
     IEnumerable<Film> ReadAllFilmsWithActorsAndDirectors();
     IEnumerable<Film> ReadFilmsByCriteria(Expression<Func<Film, bool>> predicate);
     IEnumerable<Actor> ReadActorsOfFilm(Guid imdbId);
-    void UpdateFilms(IEnumerable<Film> films);
+    void UpdateFilm(Film film);
     void DeleteFilm(Film film);
     
     void CreateActorFilm(ActorFilm actorFilm);
@@ -23,7 +23,7 @@ public interface IRepository
     IEnumerable<Actor> ReadAllActors();
     IEnumerable<Actor> ReadAllActorsWithFilms();
     IEnumerable<Actor> ReadActorsByCriteria(Expression<Func<Actor, bool>> predicate);
-    void UpdateActors(IEnumerable<Actor> actors);
+    void UpdateActor(Actor actor);
     void DeleteActor(Actor actor);
     
     void CreateDirector(Director director); 
@@ -31,6 +31,6 @@ public interface IRepository
     Director ReadDirectorByName(string name);
     IEnumerable<Director> ReadAllDirectors();
     IEnumerable<Director> ReadAllDirectorsWithFilms();
-    void UpdateDirectors(IEnumerable<Director> directors);
+    void UpdateDirector(Director director);
     void DeleteDirector(Director director);
 }

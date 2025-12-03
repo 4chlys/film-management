@@ -12,7 +12,7 @@ public interface IManager
     IEnumerable<Film> GetAllFilms();
     IEnumerable<Film> GetAllFilmsWithActorsAndDirectors();
     IEnumerable<Film> GetFilmsByGenre(Genre genre); 
-    void ChangeFilms(IEnumerable<Film> films);
+    void ChangeFilm(Film film);
     void RemoveFilm(Film film);
     void RemoveActorFromFilm(Guid filmId, Guid actorId);
     
@@ -22,7 +22,7 @@ public interface IManager
     IEnumerable<Actor> GetAllActorsWithFilms();
     IEnumerable<Actor> GetActorsByCriteria(string nameFilter, int? minimumAge);
     IEnumerable<Actor> GetActorsOfFilm(Guid imdbId);
-    void ChangeActors(IEnumerable<Actor> actors);
+    void ChangeActor(Actor actor);
     void RemoveActor(Actor actor);
     
     Director AddDirector(string name, string country, int? yearStarted, int? yearEnded); 
@@ -30,7 +30,7 @@ public interface IManager
     Director GetDirectorByName(string name);
     IEnumerable<Director> GetAllDirectors();
     IEnumerable<Director> GetAllDirectorsWithFilms();
-    void ChangeDirectors(IEnumerable<Director> directors);
+    void ChangeDirector(Director director);
     void RemoveDirector(Director director);
     
     IEnumerable<Genre> GetAllGenres();

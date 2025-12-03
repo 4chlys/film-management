@@ -43,22 +43,19 @@ public class InMemoryRepository : IRepository
         throw new NotImplementedException();
     }
 
-    public void UpdateFilms(IEnumerable<Film> films)
+    public void UpdateFilm(Film film)
     {
-        foreach (var film in films)
+        var existing = InMemoryStorage.Films.SingleOrDefault(f => f.ImdbId == film.ImdbId);
+        if (existing == null)
         {
-            var existing = InMemoryStorage.Films.SingleOrDefault(f => f.ImdbId == film.ImdbId);
-            if (existing == null)
-            {
-                CreateFilm(film);
-                continue;
-            }
-            existing.Title = film.Title;
-            existing.Genre = film.Genre;
-            existing.ReleaseDate = film.ReleaseDate;
-            existing.Rating = film.Rating;
-            existing.Director = film.Director;
+            CreateFilm(film);
+            return;
         }
+        existing.Title = film.Title;
+        existing.Genre = film.Genre;
+        existing.ReleaseDate = film.ReleaseDate;
+        existing.Rating = film.Rating;
+        existing.Director = film.Director;
     }
     
     public void DeleteFilm(Film film)
@@ -103,20 +100,17 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.Actors.AsQueryable().Where(predicate).ToList();
     }
 
-    public void UpdateActors(IEnumerable<Actor> actors)
+    public void UpdateActor(Actor actor)
     {
-        foreach (var actor in actors)
+        var existing = InMemoryStorage.Actors.SingleOrDefault(a => a.ImdbId == actor.ImdbId);
+        if (existing == null)
         {
-            var existing = InMemoryStorage.Actors.SingleOrDefault(a => a.ImdbId == actor.ImdbId);
-            if (existing == null)
-            {
-                CreateActor(actor);
-                continue;
-            }
-            existing.Name = actor.Name;
-            existing.Nationality = actor.Nationality;
-            existing.DateOfBirth = actor.DateOfBirth;
+            CreateActor(actor);
+            return;
         }
+        existing.Name = actor.Name;
+        existing.Nationality = actor.Nationality;
+        existing.DateOfBirth = actor.DateOfBirth;
     }
 
     public void DeleteActor(Actor actor)
@@ -151,20 +145,18 @@ public class InMemoryRepository : IRepository
         return InMemoryStorage.FilmDirectors.FirstOrDefault(d => d.Name == name);
     }
 
-    public void UpdateDirectors(IEnumerable<Director> directors)
+    public void UpdateDirector(Director director)
     {
-        foreach (var director in directors)
+        var existing = InMemoryStorage.FilmDirectors.FirstOrDefault(d => d.ImdbId == director.ImdbId);
+        if (existing == null)
         {
-            var existing = InMemoryStorage.FilmDirectors.FirstOrDefault(d => d.ImdbId == director.ImdbId);
-            if (existing == null)
-            {
-                CreateDirector(director);
-                continue;
-            }
-            existing.Name = director.Name;
-            existing.Country = director.Country;
-            existing.CareerStart = director.CareerStart;
+            CreateDirector(director);
+            return;
         }
+        existing.Name = director.Name;
+        existing.Country = director.Country;
+        existing.CareerStart = director.CareerStart;
+        
     }
     
     public void DeleteDirector(Director director)
